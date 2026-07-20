@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Door Lock & Handle Catalog — a Persian/RTL product catalog built with Next.js and Payload CMS 3. See [AGENTS.md](AGENTS.md) for the full spec and [CLAUDE.md](CLAUDE.md) for the phased implementation plan.
 
 ## Getting Started
 
-First, run the development server:
+### 1. Start Postgres
+
+The project expects a local Postgres instance. The easiest way is via Docker:
+
+```bash
+docker compose up -d
+```
+
+This starts Postgres 16 on `localhost:5432` with the credentials already wired up in `.env.example`.
+
+### 2. Configure environment variables
+
+```bash
+cp .env.example .env.local
+```
+
+`DATABASE_URI` already matches the `docker-compose.yml` defaults. Replace `PAYLOAD_SECRET` with your own random string for anything beyond local development.
+
+### 3. Run the dev server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Public site: [http://localhost:3000](http://localhost:3000)
+- Payload admin panel: [http://localhost:3000/admin](http://localhost:3000/admin) — on first run you'll be prompted to create the first admin user.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 4. Seed sample data (optional)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run seed
+```
+
+Clears the products/categories/brands/media collections and repopulates them with realistic Persian sample data (5 categories, 4 brands, 17 products) plus placeholder images and Site Settings, so pages can be built and previewed against real-shaped content before the client enters production data.
+
+### Other useful scripts
+
+```bash
+npm run build              # production build
+npm run generate:types     # regenerate payload-types.ts from the current collections/globals
+npm run generate:importmap # regenerate the Payload admin import map after adding custom admin components
+```
+
+## Project structure
+
+- `src/app/(site)` — the public-facing catalog (Persian, RTL)
+- `src/app/(payload)` — Payload's admin panel and REST/GraphQL API routes
+- `payload/` — Payload collections, globals, access rules, fields, and hooks
+- `payload.config.ts` — root Payload configuration (Postgres adapter, Sharp, collections)
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Payload CMS Documentation](https://payloadcms.com/docs)
