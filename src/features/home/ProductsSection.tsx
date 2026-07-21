@@ -3,7 +3,7 @@ import { ArrowLeft } from "lucide-react";
 
 import { SectionHeading } from "@/components/common/SectionHeading";
 import { Container } from "@/components/layout/Container";
-import { ProductCard } from "@/components/product/ProductCard";
+import { ProductGrid } from "@/components/product/ProductGrid";
 import { Button } from "@/components/ui/button";
 import type { ProductSummary } from "@/types/product";
 
@@ -36,11 +36,7 @@ export function ProductsSection({
             </Button>
           ) : null}
         </div>
-        <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+        <ProductGrid products={products} />
       </Container>
     </section>
   );

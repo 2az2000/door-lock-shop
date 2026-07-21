@@ -6,9 +6,15 @@ import { Container } from "@/components/layout/Container";
 import { ContactForm } from "@/features/contact/ContactForm";
 import { getSiteSettings } from "@/services/site-settings.service";
 
+const TITLE = "تماس با ما";
+const DESCRIPTION = "راه‌های ارتباطی با فروشگاه قفل و دستگیره";
+
 export const metadata: Metadata = {
-  title: "تماس با ما",
-  description: "راه‌های ارتباطی با فروشگاه قفل و دستگیره",
+  title: TITLE,
+  description: DESCRIPTION,
+  alternates: { canonical: "/contact" },
+  openGraph: { title: TITLE, description: DESCRIPTION, url: "/contact", type: "website" },
+  twitter: { title: TITLE, description: DESCRIPTION },
 };
 
 export default async function ContactPage() {

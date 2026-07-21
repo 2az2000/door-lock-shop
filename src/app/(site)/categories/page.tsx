@@ -6,9 +6,15 @@ import { CategoryCard } from "@/components/category/CategoryCard";
 import { Container } from "@/components/layout/Container";
 import { getCategories } from "@/services/categories.service";
 
+const TITLE = "دسته‌بندی محصولات";
+const DESCRIPTION = "دسته‌بندی‌های محصولات قفل، دستگیره و یراق‌آلات درب";
+
 export const metadata: Metadata = {
-  title: "دسته‌بندی محصولات",
-  description: "دسته‌بندی‌های محصولات قفل، دستگیره و یراق‌آلات درب",
+  title: TITLE,
+  description: DESCRIPTION,
+  alternates: { canonical: "/categories" },
+  openGraph: { title: TITLE, description: DESCRIPTION, url: "/categories", type: "website" },
+  twitter: { title: TITLE, description: DESCRIPTION },
 };
 
 export default async function CategoriesPage() {

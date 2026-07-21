@@ -23,7 +23,7 @@ export function BrandsStrip({ brands }: BrandsStripProps) {
                   alt={brand.logo.alt}
                   width={40}
                   height={40}
-                  className="rounded-lg object-contain grayscale transition-all hover:grayscale-0"
+                  className="size-10 rounded-lg object-contain grayscale transition-all hover:grayscale-0"
                 />
               ) : null}
               <span className="text-sm font-medium">{brand.title}</span>

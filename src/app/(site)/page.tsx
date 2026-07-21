@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+
 import { FadeIn } from "@/components/common/FadeIn";
 import { BrandsStrip } from "@/features/home/BrandsStrip";
 import { CategoriesSection } from "@/features/home/CategoriesSection";
@@ -10,6 +12,19 @@ import { getBrands } from "@/services/brands.service";
 import { getCategories } from "@/services/categories.service";
 import { getFeaturedProducts, getLatestProducts } from "@/services/products.service";
 import { getSiteSettings } from "@/services/site-settings.service";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const siteSettings = await getSiteSettings();
+  const description =
+    siteSettings.seoDefaults.seoDescription || "کاتالوگ محصولات قفل، دستگیره و لوازم یراق‌آلات درب";
+
+  return {
+    description,
+    alternates: { canonical: "/" },
+    openGraph: { url: "/", type: "website", description },
+    twitter: { description },
+  };
+}
 
 export default async function HomePage() {
   const [siteSettings, categories, featuredProducts, latestProducts, brands] = await Promise.all([

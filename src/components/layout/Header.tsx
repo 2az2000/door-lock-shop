@@ -25,7 +25,7 @@ export async function Header() {
               alt={siteSettings.logo.alt}
               width={36}
               height={36}
-              className="rounded-lg object-contain"
+              className="size-9 rounded-lg object-contain"
             />
           ) : null}
           <span>{siteSettings.companyName}</span>

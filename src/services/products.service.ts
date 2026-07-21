@@ -12,8 +12,11 @@ export type ProductSort = "newest" | "price-asc" | "price-desc";
 
 export interface ProductFilters {
   search?: string;
-  categorySlug?: string;
-  brandSlug?: string;
+  categorySlugs?: string[];
+  brandSlugs?: string[];
+  materials?: string[];
+  minPrice?: number;
+  maxPrice?: number;
   sort?: ProductSort;
   page?: number;
   limit?: number;
@@ -72,12 +75,24 @@ const getProductsUncached = async (
 
   const and: Where[] = [{ published: { equals: true } }];
 
-  if (filters.categorySlug) {
-    and.push({ "category.slug": { equals: filters.categorySlug } });
+  if (filters.categorySlugs?.length) {
+    and.push({ "category.slug": { in: filters.categorySlugs } });
   }
 
-  if (filters.brandSlug) {
-    and.push({ "brand.slug": { equals: filters.brandSlug } });
+  if (filters.brandSlugs?.length) {
+    and.push({ "brand.slug": { in: filters.brandSlugs } });
+  }
+
+  if (filters.materials?.length) {
+    and.push({ materials: { in: filters.materials } });
+  }
+
+  if (filters.minPrice !== undefined) {
+    and.push({ price: { greater_than_equal: filters.minPrice } });
+  }
+
+  if (filters.maxPrice !== undefined) {
+    and.push({ price: { less_than_equal: filters.maxPrice } });
   }
 
   if (filters.search) {
@@ -172,6 +187,32 @@ const getRelatedProductsUncached = async (
 
   return result.docs.map(toProductSummary);
 };
+
+const getMaterialOptionsUncached = async (): Promise<string[]> => {
+  const payload = await getPayloadClient();
+
+  const result = await payload.find({
+    collection: "products",
+    where: { published: { equals: true } },
+    limit: 200,
+    depth: 0,
+  });
+
+  const materials = new Set<string>();
+  for (const doc of result.docs) {
+    for (const material of doc.materials ?? []) {
+      materials.add(material);
+    }
+  }
+
+  return Array.from(materials).sort((a, b) => a.localeCompare(b, "fa"));
+};
+
+export const getMaterialOptions = unstable_cache(
+  getMaterialOptionsUncached,
+  ["products", "materials"],
+  { revalidate: 60, tags: ["products"] },
+);
 
 export const getProducts = unstable_cache(getProductsUncached, ["products", "list"], {
   revalidate: 60,

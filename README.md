@@ -1,58 +1,223 @@
-Door Lock & Handle Catalog — a Persian/RTL product catalog built with Next.js and Payload CMS 3. See [AGENTS.md](AGENTS.md) for the full spec and [CLAUDE.md](CLAUDE.md) for the phased implementation plan.
+فروشگاه قفل و دستگیره — یک کاتالوگ محصول فارسی/راست‌به‌چپ ساخته‌شده با Next.js و Payload CMS 3. مستندات فنی کامل پروژه در [AGENTS.md](AGENTS.md) و پلن پیاده‌سازی فازبندی‌شده در [CLAUDE.md](CLAUDE.md) قرار دارد.
 
-## Getting Started
+این راهنما فرض می‌کند شما سیستم را از صفر راه‌اندازی می‌کنید و تا امروز با Docker کار نکرده‌اید — همه‌چیز قدم‌به‌قدم توضیح داده شده.
 
-### 1. Start Postgres
+---
 
-The project expects a local Postgres instance. The easiest way is via Docker:
+## پیش‌نیازها
+
+قبل از شروع باید این موارد روی سیستم نصب باشند:
+
+1. **Node.js** نسخه ۲۰ به بالا (شامل `npm`)
+2. **Git** (اختیاری — فقط اگر می‌خواهید کد را از یک مخزن دریافت کنید)
+3. **Docker Desktop** — برای اجرای پایگاه‌داده PostgreSQL بدون نیاز به نصب دستی آن
+
+اگر Node.js نصب نیست، از [nodejs.org](https://nodejs.org) نسخه‌ی LTS را دانلود و نصب کنید. برای اطمینان، در ترمینال بزنید:
 
 ```bash
-docker compose up -d
+node --version
+npm --version
 ```
 
-This starts Postgres 16 on `localhost:5432` with the credentials already wired up in `.env.example`.
+---
 
-### 2. Configure environment variables
+## مرحله ۱: نصب و راه‌اندازی Docker Desktop
+
+**Docker چیست و چرا لازم است؟** این پروژه برای ذخیره‌ی اطلاعات (محصولات، دسته‌بندی‌ها، تنظیمات سایت و ...) به یک پایگاه‌داده PostgreSQL نیاز دارد. به‌جای نصب مستقیم Postgres روی سیستم (که مراحل متفاوتی در ویندوز/مک/لینوکس دارد و ممکن است با نسخه‌های دیگر تداخل کند)، از Docker استفاده می‌کنیم: Docker یک نسخه‌ی کاملاً ایزوله از Postgres را داخل یک «کانتینر» اجرا می‌کند، فقط با یک دستور و بدون کثیف کردن سیستم اصلی شما.
+
+### نصب در ویندوز
+
+1. از [docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop) نسخه‌ی ویندوز را دانلود کنید.
+2. فایل نصب‌کننده را اجرا کنید. Docker Desktop روی ویندوز به **WSL2** (Windows Subsystem for Linux) نیاز دارد؛ نصب‌کننده معمولاً خودش آن را فعال می‌کند. اگر پیغامی درباره‌ی WSL2 دیدید، طبق راهنمای روی صفحه دستور `wsl --install` را در **PowerShell با دسترسی Administrator** اجرا کنید و سپس سیستم را ری‌استارت کنید.
+3. بعد از نصب، از منوی Start برنامه‌ی **Docker Desktop** را باز کنید.
+4. چند ثانیه تا یک دقیقه صبر کنید تا آیکون نهنگ (🐳) در نوار وظیفه (System Tray) ثابت و «سبز/آماده» شود. تا وقتی این آیکون در حال چرخش یا زرد است، Docker هنوز کاملاً بالا نیامده.
+5. برای اطمینان از نصب صحیح، یک ترمینال جدید (PowerShell یا Git Bash) باز کنید و بزنید:
+
+   ```bash
+   docker --version
+   docker info
+   ```
+
+   اگر دستور دوم بدون خطا اطلاعاتی چاپ کرد، یعنی Docker کاملاً آماده است.
+
+### نصب در macOS
+
+از همان لینک بالا، نسخه‌ی مک (بسته به تراشه‌ی Intel یا Apple Silicon) را دانلود و نصب کنید، سپس از Launchpad اجرایش کنید و صبر کنید تا آیکون نهنگ در نوار بالای صفحه ثابت شود.
+
+### نصب در لینوکس
+
+طبق [راهنمای رسمی Docker Engine](https://docs.docker.com/engine/install/) برای توزیع خودتان نصب کنید. روی لینوکس، Docker معمولاً به‌صورت یک سرویس پس‌زمینه اجرا می‌شود و نیازی به برنامه‌ی گرافیکی جداگانه نیست.
+
+> **نکته:** از این به بعد، هر بار که می‌خواهید روی این پروژه کار کنید، باید Docker Desktop باز و در حال اجرا باشد (آیکون نهنگ در نوار وظیفه). اگر بسته باشد، دستورات مربوط به پایگاه‌داده در مرحله‌ی ۵ با خطا مواجه می‌شوند.
+
+---
+
+## مرحله ۲: دریافت کد پروژه
+
+اگر از یک مخزن Git دریافت می‌کنید:
+
+```bash
+git clone <repository-url>
+cd door-lock-shop
+```
+
+اگر فایل‌های پروژه را مستقیم کپی کرده‌اید، کافی‌ست در ترمینال وارد پوشه‌ی پروژه شوید.
+
+---
+
+## مرحله ۳: نصب وابستگی‌ها
+
+```bash
+npm install
+```
+
+(بار اول ممکن است چند دقیقه طول بکشد.)
+
+---
+
+## مرحله ۴: ساخت فایل تنظیمات محیطی
+
+پروژه یک فایل نمونه به‌نام `.env.example` دارد. آن را کپی کنید:
 
 ```bash
 cp .env.example .env.local
 ```
 
-`DATABASE_URI` already matches the `docker-compose.yml` defaults. Replace `PAYLOAD_SECRET` with your own random string for anything beyond local development.
+اگر از PowerShell استفاده می‌کنید:
 
-### 3. Run the dev server
+```powershell
+Copy-Item .env.example .env.local
+```
+
+مقدار پیش‌فرض داخل این فایل با تنظیمات `docker-compose.yml` هماهنگ است و برای اجرای محلی نیازی به تغییر ندارد:
+
+```
+DATABASE_URI=postgresql://doorlockshop:doorlockshop@localhost:5432/doorlockshop
+PAYLOAD_SECRET=replace-with-a-long-random-string
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+```
+
+پیشنهاد می‌شود مقدار `PAYLOAD_SECRET` را با یک رشته‌ی تصادفی و طولانی خودتان جایگزین کنید (هر متن تصادفی کافی است، فقط باید بعداً ثابت بماند — تغییرش یعنی همه باید دوباره وارد پنل ادمین شوند).
+
+`NEXT_PUBLIC_SITE_URL` آدرس نهایی سایت است و در sitemap، robots.txt و متادیتای SEO (canonical، Open Graph) استفاده می‌شود؛ هنگام دیپلوی روی دامنه‌ی واقعی، این مقدار را به آدرس واقعی سایت تغییر دهید.
+
+---
+
+## مرحله ۵: اجرای پایگاه‌داده Postgres با Docker
+
+مطمئن شوید Docker Desktop باز و آماده است (مرحله ۱)، سپس در پوشه‌ی پروژه این دستور را بزنید:
+
+```bash
+docker compose up -d
+```
+
+این دستور فایل `docker-compose.yml` را می‌خواند، ایمیج Postgres نسخه‌ی ۱۶ را (فقط بار اول) دانلود می‌کند و یک کانتینر پایگاه‌داده روی پورت `5432` بالا می‌آورد — دقیقاً با نام کاربری/رمز/نام پایگاه‌داده‌ای که در `.env.local` نوشته شده.
+
+برای اطمینان از اجرای صحیح:
+
+```bash
+docker compose ps
+```
+
+باید خروجی مشابه این را ببینید، با مقدار `Up` در ستون STATUS:
+
+```
+NAME                        STATUS
+door-lock-shop-postgres-1   Up ...
+```
+
+> پایگاه‌داده تا وقتی که خودتان دستور توقف بزنید، در پس‌زمینه اجرا باقی می‌ماند (حتی بعد از بستن ترمینال). هر بار که سیستم را روشن می‌کنید یا Docker Desktop را می‌بندید، کافی‌ست دوباره `docker compose up -d` را بزنید تا کانتینر بالا بیاید.
+
+---
+
+## مرحله ۶: اجرای پروژه
 
 ```bash
 npm run dev
 ```
 
-- Public site: [http://localhost:3000](http://localhost:3000)
-- Payload admin panel: [http://localhost:3000/admin](http://localhost:3000/admin) — on first run you'll be prompted to create the first admin user.
+بعد از چند ثانیه:
 
-### 4. Seed sample data (optional)
+- **سایت اصلی:** [http://localhost:3000](http://localhost:3000)
+- **پنل مدیریت (ادمین):** [http://localhost:3000/admin](http://localhost:3000/admin)
+
+---
+
+## مرحله ۷: ساخت اولین کاربر ادمین
+
+چون پایگاه‌داده روی این سیستم کاملاً تازه است، هیچ کاربری در آن وجود ندارد. وقتی به آدرس `/admin` بروید، فرم **«Create your first admin user»** را می‌بینید. یک ایمیل و رمز عبور دلخواه وارد کنید و حتماً جایی یادداشتشان کنید — این‌ها مخصوص همین پایگاه‌داده روی همین سیستم هستند و با اطلاعات ورود روی سیستم‌های دیگر یکی نیستند.
+
+---
+
+## مرحله ۸ (اختیاری): پر کردن پایگاه‌داده با اطلاعات نمونه
 
 ```bash
 npm run seed
 ```
 
-Clears the products/categories/brands/media collections and repopulates them with realistic Persian sample data (5 categories, 4 brands, 17 products) plus placeholder images and Site Settings, so pages can be built and previewed against real-shaped content before the client enters production data.
+این دستور محتویات فعلی دسته‌بندی‌ها/برندها/محصولات/رسانه‌ها را پاک کرده و با ۵ دسته‌بندی، ۴ برند، ۱۷ محصول نمونه‌ی فارسی + تصاویر placeholder + تنظیمات کامل سایت جایگزین می‌کند، تا بتوانید صفحات را با داده‌ی واقعی ببینید. کاربر ادمینی که در مرحله‌ی قبل ساختید دست‌نخورده باقی می‌ماند.
 
-### Other useful scripts
+---
+
+## دستورات دیگر
 
 ```bash
-npm run build              # production build
-npm run generate:types     # regenerate payload-types.ts from the current collections/globals
-npm run generate:importmap # regenerate the Payload admin import map after adding custom admin components
+npm run build              # ساخت نسخه‌ی نهایی (production)
+npm run generate:types     # ساخت دوباره‌ی payload-types.ts بعد از تغییر کالکشن‌ها/گلوبال‌ها
+npm run generate:importmap # ساخت دوباره‌ی import map پنل ادمین بعد از افزودن کامپوننت سفارشی
 ```
 
-## Project structure
+---
 
-- `src/app/(site)` — the public-facing catalog (Persian, RTL)
-- `src/app/(payload)` — Payload's admin panel and REST/GraphQL API routes
-- `payload/` — Payload collections, globals, access rules, fields, and hooks
-- `payload.config.ts` — root Payload configuration (Postgres adapter, Sharp, collections)
+## رفع اشکالات رایج (Troubleshooting)
 
-## Learn More
+**Docker Desktop باز نمی‌شود یا آیکون نهنگ قرمز/خاکستری می‌ماند**
+در ویندوز مطمئن شوید قابلیت Virtualization (VT-x برای Intel یا AMD-V برای AMD) در تنظیمات BIOS سیستم فعال است. سپس در PowerShell با دسترسی Administrator دستور `wsl --update` را بزنید و سیستم را یک‌بار ری‌استارت کنید.
 
-- [Next.js Documentation](https://nextjs.org/docs)
-- [Payload CMS Documentation](https://payloadcms.com/docs)
+**اجرای `docker compose up -d` خطای `Cannot connect to the Docker daemon` می‌دهد**
+یعنی برنامه‌ی Docker Desktop باز نیست یا هنوز کاملاً بالا نیامده. آن را از منوی استارت اجرا کنید، صبر کنید آیکون نهنگ ثابت شود، و دوباره امتحان کنید.
+
+**خطای `port is already allocated` روی پورت 5432**
+یک نسخه‌ی دیگر از Postgres (نصب مستقیم روی سیستم یا یک کانتینر دیگر) از قبل همان پورت را گرفته. یا آن سرویس را متوقف کنید، یا در `docker-compose.yml` پورت را مثلاً به `"5433:5432"` تغییر دهید و مقدار پورت در `DATABASE_URI` داخل `.env.local` را هم به `5433` به‌روزرسانی کنید.
+
+**پورت 3000 قبلاً در حال استفاده است**
+با پورت دیگری اجرا کنید:
+
+```bash
+npm run dev -- -p 3001
+```
+
+**رمز عبور ادمین را فراموش کرده‌اید**
+- در تنظیمات فعلی پروژه هیچ سرویس ایمیل واقعی وصل نیست؛ وقتی از صفحه‌ی ورود `/admin` گزینه‌ی «Forgot password?» را بزنید، به‌جای ارسال ایمیل واقعی، لینک بازیابی رمز به‌صورت متن در همان ترمینالی که `npm run dev` را اجرا کرده‌اید چاپ می‌شود. آن لینک را از ترمینال کپی کرده و در مرورگر باز کنید.
+- اگر پایگاه‌داده کاملاً جدید/خالی است (مثلاً تازه روی یک سیستم دیگر راه‌اندازی کرده‌اید)، نیازی به بازیابی نیست — چون هنوز هیچ کاربری ساخته نشده، با رفتن به `/admin` مستقیم فرم «ساخت اولین کاربر ادمین» را می‌بینید.
+
+**بعد از تغییر کالکشن‌های Payload، تایپ‌اسکریپت خطا می‌دهد**
+
+```bash
+npm run generate:types
+```
+
+**می‌خواهید پایگاه‌داده را کاملاً پاک کرده و از صفر شروع کنید**
+
+```bash
+docker compose down -v
+docker compose up -d
+```
+
+فلگ `-v` یعنی حجم ذخیره‌سازی داده‌ها هم پاک شود. بعد از اجرای دوباره، پایگاه‌داده کاملاً خالی خواهد بود؛ باید دوباره وارد مرحله‌ی ۷ (ساخت کاربر ادمین) و در صورت نیاز مرحله‌ی ۸ (`npm run seed`) شوید.
+
+---
+
+## ساختار پروژه
+
+- `src/app/(site)` — بخش عمومی سایت (فارسی، راست‌به‌چپ)
+- `src/app/(payload)` — پنل ادمین و مسیرهای REST/GraphQL پیلود
+- `payload/` — کالکشن‌ها، گلوبال‌ها، قوانین دسترسی، فیلدها و هوک‌های Payload
+- `payload.config.ts` — تنظیمات اصلی Payload (آداپتور Postgres، Sharp، ثبت کالکشن‌ها)
+- `src/services/` — تنها لایه‌ای که مجاز به ارتباط مستقیم با Payload است؛ رابط کاربری همیشه از این‌جا داده می‌گیرد
+
+## منابع بیشتر
+
+- [مستندات Next.js](https://nextjs.org/docs)
+- [مستندات Payload CMS](https://payloadcms.com/docs)
+- [مستندات Docker](https://docs.docker.com/get-started/)
