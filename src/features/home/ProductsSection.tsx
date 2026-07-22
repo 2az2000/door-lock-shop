@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
+import { Slider } from "@/components/common/Slider";
 import { SectionHeading } from "@/components/common/SectionHeading";
 import { Container } from "@/components/layout/Container";
-import { ProductGrid } from "@/components/product/ProductGrid";
+import { ProductCard } from "@/components/product/ProductCard";
 import { Button } from "@/components/ui/button";
 import type { ProductSummary } from "@/types/product";
 
@@ -36,7 +37,11 @@ export function ProductsSection({
             </Button>
           ) : null}
         </div>
-        <ProductGrid products={products} />
+        <Slider className="mt-8">
+          {products.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </Slider>
       </Container>
     </section>
   );

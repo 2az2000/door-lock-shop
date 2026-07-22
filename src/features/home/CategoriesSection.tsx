@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
 import { CategoryCard } from "@/components/category/CategoryCard";
+import { Slider } from "@/components/common/Slider";
 import { SectionHeading } from "@/components/common/SectionHeading";
 import { Container } from "@/components/layout/Container";
 import { Button } from "@/components/ui/button";
@@ -28,11 +29,11 @@ export function CategoriesSection({ categories }: CategoriesSectionProps) {
             <ArrowLeft className="size-4" />
           </Button>
         </div>
-        <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {categories.slice(0, 4).map((category) => (
+        <Slider className="mt-8">
+          {categories.map((category) => (
             <CategoryCard key={category.id} category={category} />
           ))}
-        </div>
+        </Slider>
       </Container>
     </section>
   );

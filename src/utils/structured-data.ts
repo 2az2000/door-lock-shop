@@ -1,4 +1,5 @@
 import { SITE_URL } from "@/constants/site";
+import type { ArticleDetail } from "@/types/article";
 import type { ProductDetail } from "@/types/product";
 import type { SiteSettings } from "@/types/site-settings";
 
@@ -44,6 +45,19 @@ export function productJsonLd(product: ProductDetail) {
           },
         }
       : {}),
+  };
+}
+
+export function articleJsonLd(article: ArticleDetail) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: article.title,
+    description: article.excerpt ?? undefined,
+    ...(article.featuredImage ? { image: [absoluteUrl(article.featuredImage.url)] } : {}),
+    ...(article.author ? { author: { "@type": "Person", name: article.author } } : {}),
+    ...(article.publishedAt ? { datePublished: article.publishedAt } : {}),
+    mainEntityOfPage: `${SITE_URL}/articles/${article.slug}`,
   };
 }
 

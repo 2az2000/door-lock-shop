@@ -23,15 +23,19 @@ export function CategoryCard({ category }: CategoryCardProps) {
               src={category.image.url}
               alt={category.image.alt}
               fill
-              sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+              sizes="(min-width: 1024px) 19vw, (min-width: 768px) 24vw, (min-width: 640px) 32vw, 45vw"
               className="object-cover transition-transform duration-300 group-hover:scale-105"
             />
           ) : null}
         </div>
-        <div className="space-y-1 p-4">
-          <h3 className="font-heading text-base font-semibold text-foreground">{category.title}</h3>
+        <div className="space-y-1 p-3 sm:p-4">
+          <h3 className="line-clamp-1 font-heading text-sm font-semibold text-foreground sm:text-base">
+            {category.title}
+          </h3>
           {category.description ? (
-            <p className="line-clamp-2 text-sm text-muted-foreground">{category.description}</p>
+            <p className="line-clamp-2 hidden text-sm text-muted-foreground sm:block">
+              {category.description}
+            </p>
           ) : null}
         </div>
       </Link>

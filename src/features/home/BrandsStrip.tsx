@@ -14,7 +14,7 @@ export function BrandsStrip({ brands }: BrandsStripProps) {
     <section className="border-y border-border bg-muted/30 py-12">
       <Container>
         <p className="text-center text-sm font-medium text-muted-foreground">برندهای همکار</p>
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-8">
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-6 sm:gap-8">
           {brands.map((brand) => (
             <div key={brand.id} className="flex items-center gap-2 text-muted-foreground">
               {brand.logo ? (

@@ -52,6 +52,10 @@ Hand-written DTOs in `src/types/` decoupled from raw Payload types; `src/lib/pay
 Alt-text/focus/contrast audit; `"use client"` boundary audit; `loading.tsx`/`error.tsx`/`not-found.tsx` per segment; full RTL visual QA; README setup instructions; Lighthouse ≥90 across the board.
 *Done when:* all AGENTS.md Definition-of-Done checkboxes pass; `npm run build && npm run lint` clean with strict TS and no `any`.
 
+**Phase 12 — ✅ DONE — Articles / Blog (مقالات)**
+`payload/collections/{ArticleCategories,Articles}.ts` (excerpt, richText content, category relationship, featuredImage, author, tags, publishedAt, SEO fields); `src/types/article.ts`; `src/services/{article-categories,articles}.service.ts` (search/category filter/pagination, featured/latest/related queries); `src/components/article/{ArticleCard,ArticleGrid,RelatedArticles,ArticleContent,ArticleFilters}.tsx`; `src/app/(site)/articles/page.tsx` + `[slug]/page.tsx` with `loading.tsx` for both; `src/features/home/ArticlesSection.tsx` (home page slider, reusing `Slider`); `articleJsonLd()` in `structured-data.ts`; sitemap/nav updated.
+*Done when:* `/articles` and `/articles/[slug]` render seeded data with search/category filter/pagination; home page shows a "آخرین مقالات" slider; sitemap includes all article slugs; Article + BreadcrumbList JSON-LD present on detail pages.
+
 ---
 
 # گزارش کامل پیاده‌سازی (همه‌ی فازها)
@@ -115,6 +119,16 @@ Alt-text/focus/contrast audit; `"use client"` boundary audit; `loading.tsx`/`err
 - **`npm run lint` و `npx tsc --noEmit` و `npm run build`:** هر سه کاملاً تمیز (۰ خطا، ۰ هشدار).
 - **محدودیت شناخته‌شده (رفع‌نشدنی از سمت پروژه):** در Next.js 16.2.10، وقتی `notFound()` برای یک اسلاگ نامعتبر در مسیر پویا (`products/[slug]`, `categories/[slug]`) که `generateStaticParams` دارد و از قبل build نشده فراخوانی می‌شود، محتوای صفحه‌ی ۴۰۴ درست رندر می‌شود ولی status code برابر ۲۰۰ برمی‌گردد (تأیید شد که این رفتار خودِ Next.js است، مستقل از Turbopack/Webpack، و فقط برای اسلاگ‌های واقعاً ناموجود رخ می‌دهد نه محصولات واقعی). راه‌حل `dynamicParams = false` این مشکل را حل می‌کند ولی باعث می‌شود محصولات جدیدی که ادمین بعد از build اضافه می‌کند تا دیپلوی بعدی اصلاً در دسترس نباشند — چون این با نیاز اصلی پروژه («مدیریت محتوا بدون نیاز به دولوپر») در تضاد است، این trade-off عمداً پذیرفته نشد.
 
-**خلاصه‌ی نهایی:** همه‌ی ۱۲ فاز تکمیل شدند؛ `npm run build`، `npm run lint` و `npx tsc --noEmit` تمیز هستند؛ تمام چک‌باکس‌های Definition-of-Done در AGENTS.md (ریسپانسیو، دسترس‌پذیر، آماده‌ی SEO، بهینه، تایپ‌شده، قابل‌استفاده‌ی مجدد، تست‌شده، Clean Code، مطابق Design System) به‌جز اجرای واقعی Lighthouse (که نیاز به مرورگر/ابزار خارجی دارد و در این محیط CLI انجام نشد) پوشش داده شده‌اند.
+**خلاصه‌ی نهایی (فاز ۰ تا ۱۱):** همه‌ی ۱۲ فاز تکمیل شدند؛ `npm run build`، `npm run lint` و `npx tsc --noEmit` تمیز هستند؛ تمام چک‌باکس‌های Definition-of-Done در AGENTS.md (ریسپانسیو، دسترس‌پذیر، آماده‌ی SEO، بهینه، تایپ‌شده، قابل‌استفاده‌ی مجدد، تست‌شده، Clean Code، مطابق Design System) به‌جز اجرای واقعی Lighthouse (که نیاز به مرورگر/ابزار خارجی دارد و در این محیط CLI انجام نشد) پوشش داده شده‌اند.
+
+### Phase 12 — مقالات (Blog/Articles)
+- کالکشن‌های جدید Payload: `ArticleCategories` (title/slug/description/order، مثل Categories) و `Articles` (excerpt، richText content، رابطه با دسته‌ی مقاله، featuredImage اجباری، author، tags چندتایی، publishedAt، featured/published، فیلدهای SEO مشترک).
+- لایه‌ی سرویس تایپ‌شده: `src/services/article-categories.service.ts` و `articles.service.ts` (جستجو، فیلتر دسته، صفحه‌بندی، featured/latest/related) — دقیقاً هم‌الگو با سرویس‌های محصول، با `unstable_cache` و ۶۰ ثانیه ISR.
+- کامپوننت‌ها: `ArticleCard`/`ArticleGrid` (هم‌الگو با Product)، `ArticleFilters` (جستجو + Select دسته‌بندی)، `ArticleContent` (رندر HTML خروجی از Lexical با تایپوگرافی خوانا)، `RelatedArticles`.
+- صفحات: `/articles` (فهرست با فیلتر/جستجو/صفحه‌بندی) و `/articles/[slug]` (SSG، breadcrumb خانه→مقالات→دسته→مقاله، تصویر شاخص، محتوا، تگ‌ها، مقالات مرتبط) + `loading.tsx` برای هر دو.
+- صفحه‌ی اصلی: بخش «آخرین مقالات» با همان کامپوننت Slider موجود؛ لینک «مقالات» به ناوبری اصلی (هدر/فوتر) اضافه شد.
+- SEO: `articleJsonLd()` (schema.org Article) + BreadcrumbList روی صفحه‌ی مقاله؛ sitemap شامل `/articles` و تمام اسلاگ‌های مقاله شد.
+- داده‌ی نمونه: ۳ دسته‌بندی مقاله (راهنمای خرید/اخبار/نکات فنی) و ۶ مقاله‌ی کامل در `seed.ts`.
+- **تأیید:** `payload generate:types`، `npm run seed`، `tsc`، `lint`، `build` همگی تمیز (۴۰ صفحه در build، شامل ۶ صفحه‌ی مقاله‌ی SSG)؛ ۱۷ چک زنده روی سرور (فهرست، جزئیات، فیلتر دسته‌بندی، بخش خانه، JSON-LD، sitemap) همگی PASS.
 
 ---

@@ -12,15 +12,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { ProductSort } from "@/services/products.service";
+import type { ArticleCategorySummary } from "@/types/article";
 
-const SORT_OPTIONS: { value: ProductSort; label: string }[] = [
-  { value: "newest", label: "جدیدترین" },
-  { value: "price-asc", label: "ارزان‌ترین" },
-  { value: "price-desc", label: "گران‌ترین" },
-];
+interface ArticleFiltersProps {
+  categories: ArticleCategorySummary[];
+}
 
-export function ProductToolbar() {
+const ALL_VALUE = "all";
+
+export function ArticleFilters({ categories }: ArticleFiltersProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -28,11 +28,16 @@ export function ProductToolbar() {
 
   const [search, setSearch] = useState(searchParams.get("q") ?? "");
 
+  const categoryItems = [
+    { value: ALL_VALUE, label: "همه دسته‌بندی‌ها" },
+    ...categories.map((category) => ({ value: category.slug, label: category.title })),
+  ];
+
   const updateParams = (updates: Record<string, string | null>) => {
     const params = new URLSearchParams(searchParams.toString());
 
     for (const [key, value] of Object.entries(updates)) {
-      if (!value) {
+      if (!value || value === ALL_VALUE) {
         params.delete(key);
       } else {
         params.set(key, value);
@@ -65,28 +70,30 @@ export function ProductToolbar() {
           <Search className="size-4" />
         </InputGroupAddon>
         <InputGroupInput
-          placeholder="جستجوی محصول..."
+          placeholder="جستجوی مقاله..."
           value={search}
           onChange={(event) => setSearch(event.target.value)}
         />
       </InputGroup>
 
-      <Select
-        items={SORT_OPTIONS}
-        value={searchParams.get("sort") ?? "newest"}
-        onValueChange={(value) => updateParams({ sort: value === "newest" ? null : (value as string) })}
-      >
-        <SelectTrigger className="w-full sm:w-40">
-          <SelectValue placeholder="مرتب‌سازی" />
-        </SelectTrigger>
-        <SelectContent>
-          {SORT_OPTIONS.map((option) => (
-            <SelectItem key={option.value} value={option.value}>
-              {option.label}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+      {categories.length > 0 ? (
+        <Select
+          items={categoryItems}
+          value={searchParams.get("category") ?? ALL_VALUE}
+          onValueChange={(value) => updateParams({ category: value as string })}
+        >
+          <SelectTrigger className="w-full sm:w-48">
+            <SelectValue placeholder="دسته‌بندی" />
+          </SelectTrigger>
+          <SelectContent>
+            {categoryItems.map((item) => (
+              <SelectItem key={item.value} value={item.value}>
+                {item.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      ) : null}
     </div>
   );
 }

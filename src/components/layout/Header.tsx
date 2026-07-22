@@ -14,10 +14,10 @@ export async function Header() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-sm">
-      <Container className="flex h-16 items-center justify-between gap-4">
+      <Container className="flex h-16 items-center justify-between gap-2 sm:gap-4">
         <Link
           href="/"
-          className="flex items-center gap-2 font-heading text-lg font-semibold text-foreground"
+          className="flex items-center gap-2 font-heading text-base font-semibold text-foreground sm:text-lg"
         >
           {siteSettings.logo ? (
             <Image
@@ -28,7 +28,7 @@ export async function Header() {
               className="size-9 rounded-lg object-contain"
             />
           ) : null}
-          <span>{siteSettings.companyName}</span>
+          <span className="max-w-35 truncate sm:max-w-none">{siteSettings.companyName}</span>
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex">

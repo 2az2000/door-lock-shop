@@ -27,7 +27,7 @@ export function ProductInfo({ product, siteSettings }: ProductInfoProps) {
         <p className="text-muted-foreground">{product.shortDescription}</p>
       ) : null}
 
-      <p className="text-2xl font-semibold text-foreground">
+      <p className="text-xl font-semibold text-foreground sm:text-2xl">
         {formatPrice(product.price, product.priceLabel)}
       </p>
 

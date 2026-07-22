@@ -136,7 +136,7 @@ export function ProductFiltersSidebar({
       </div>
 
       <FilterGroup title="محدوده قیمت (تومان)">
-        <div className="flex items-center gap-2">
+        <div className="flex min-w-0 items-center gap-2">
           <input
             type="number"
             inputMode="numeric"
@@ -144,9 +144,9 @@ export function ProductFiltersSidebar({
             placeholder="از"
             value={minPrice}
             onChange={(event) => setMinPrice(event.target.value)}
-            className="w-full rounded-lg border border-input bg-transparent px-3 py-1.5 text-sm text-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+            className="w-full min-w-0 rounded-lg border border-input bg-transparent px-3 py-1.5 text-sm text-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
           />
-          <span className="text-xs text-muted-foreground">تا</span>
+          <span className="shrink-0 text-xs text-muted-foreground">تا</span>
           <input
             type="number"
             inputMode="numeric"
@@ -154,7 +154,7 @@ export function ProductFiltersSidebar({
             placeholder="تا"
             value={maxPrice}
             onChange={(event) => setMaxPrice(event.target.value)}
-            className="w-full rounded-lg border border-input bg-transparent px-3 py-1.5 text-sm text-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+            className="w-full min-w-0 rounded-lg border border-input bg-transparent px-3 py-1.5 text-sm text-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
           />
         </div>
       </FilterGroup>

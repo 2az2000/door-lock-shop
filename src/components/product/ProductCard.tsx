@@ -24,20 +24,22 @@ export function ProductCard({ product }: ProductCardProps) {
               src={product.featuredImage.url}
               alt={product.featuredImage.alt}
               fill
-              sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+              sizes="(min-width: 1024px) 19vw, (min-width: 768px) 24vw, (min-width: 640px) 32vw, 45vw"
               className="object-cover transition-transform duration-300 group-hover:scale-105"
             />
           ) : null}
         </div>
-        <div className="flex flex-1 flex-col gap-1 p-4">
+        <div className="flex flex-1 flex-col gap-1 p-3 sm:p-4">
           {product.category ? (
             <span className="text-xs font-medium text-muted-foreground">{product.category.title}</span>
           ) : null}
-          <h3 className="line-clamp-1 font-heading text-base font-semibold text-foreground">
+          <h3 className="line-clamp-1 font-heading text-sm font-semibold text-foreground sm:text-base">
             {product.title}
           </h3>
           {product.shortDescription ? (
-            <p className="line-clamp-2 text-sm text-muted-foreground">{product.shortDescription}</p>
+            <p className="line-clamp-2 hidden text-sm text-muted-foreground sm:block">
+              {product.shortDescription}
+            </p>
           ) : null}
           <span className="mt-auto pt-2 text-sm font-semibold text-foreground">
             {formatPrice(product.price, product.priceLabel)}

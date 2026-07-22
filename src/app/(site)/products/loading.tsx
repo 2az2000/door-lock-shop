@@ -17,7 +17,7 @@ export default function Loading() {
 
         <div className="min-w-0 flex-1">
           <Skeleton className="h-10 w-full" />
-          <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="mt-6 grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-3 xl:grid-cols-4">
             {Array.from({ length: 8 }).map((_, index) => (
               <Skeleton key={index} className="aspect-square w-full rounded-2xl" />
             ))}

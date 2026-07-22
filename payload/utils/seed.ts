@@ -28,6 +28,26 @@ function toRichText(text: string) {
   };
 }
 
+function toRichTextParagraphs(paragraphs: string[]) {
+  return {
+    root: {
+      type: "root",
+      children: paragraphs.map((text) => ({
+        type: "paragraph",
+        children: [{ type: "text", text, version: 1 }],
+        direction: "rtl" as const,
+        format: "" as const,
+        indent: 0,
+        version: 1,
+      })),
+      direction: "rtl" as const,
+      format: "" as const,
+      indent: 0,
+      version: 1,
+    },
+  };
+}
+
 const createPlaceholderImage = async (label: string, color: string): Promise<Buffer> => {
   const svg = `
     <svg width="1200" height="900" xmlns="http://www.w3.org/2000/svg">
@@ -347,6 +367,143 @@ const productSeeds: ProductSeed[] = [
   },
 ];
 
+interface ArticleCategorySeed {
+  key: string;
+  title: string;
+  slug: string;
+  description: string;
+  color: string;
+  order: number;
+}
+
+const articleCategorySeeds: ArticleCategorySeed[] = [
+  {
+    key: "buying-guide",
+    title: "راهنمای خرید",
+    slug: "buying-guide",
+    description: "راهنماهای کاربردی برای انتخاب بهترین قفل، دستگیره و یراق‌آلات درب",
+    color: "#5a6b7a",
+    order: 1,
+  },
+  {
+    key: "news",
+    title: "اخبار و رویدادها",
+    slug: "news",
+    description: "تازه‌ترین اخبار، محصولات جدید و همکاری‌های مجموعه",
+    color: "#7a5a4a",
+    order: 2,
+  },
+  {
+    key: "maintenance-tips",
+    title: "نکات فنی و نگهداری",
+    slug: "maintenance-tips",
+    description: "نکات فنی نصب، تعمیر و نگهداری قفل و دستگیره",
+    color: "#4a7a6a",
+    order: 3,
+  },
+];
+
+interface ArticleSeed {
+  title: string;
+  slug: string;
+  categoryKey: string;
+  author: string;
+  tags: string[];
+  excerpt: string;
+  paragraphs: string[];
+  publishedAt: string;
+  featured?: boolean;
+}
+
+const articleSeeds: ArticleSeed[] = [
+  {
+    title: "راهنمای انتخاب دستگیره مناسب برای درب چوبی",
+    slug: "choosing-the-right-handle-for-wooden-doors",
+    categoryKey: "buying-guide",
+    author: "تیم محتوا",
+    tags: ["دستگیره", "راهنمای خرید"],
+    excerpt:
+      "قبل از خرید دستگیره برای درب چوبی، به این نکات مهم درباره‌ی جنس، ابعاد و سبک طراحی توجه کنید.",
+    paragraphs: [
+      "انتخاب دستگیره‌ی مناسب برای درب چوبی تنها به ظاهر آن محدود نمی‌شود؛ جنس، ابعاد و نوع مکانیزم نصب هم نقش مهمی در دوام و عملکرد آن دارند.",
+      "دستگیره‌های استیل ضدزنگ و برنج به‌دلیل مقاومت بالا در برابر زنگ‌زدگی و سایش، برای استفاده‌ی طولانی‌مدت گزینه‌ی مناسبی هستند. برای درهای داخلی می‌توان از مدل‌های سبک‌تر آلومینیومی نیز استفاده کرد.",
+      "همچنین توصیه می‌شود پیش از خرید، فاصله‌ی پیچ‌ها و قطر میله‌ی دستگیره را با قفل نصب‌شده روی درب مطابقت دهید تا در زمان نصب با مشکل مواجه نشوید.",
+    ],
+    publishedAt: "2026-05-10T08:00:00.000Z",
+    featured: true,
+  },
+  {
+    title: "چگونه قفل دیجیتال مناسب خانه خود را انتخاب کنیم؟",
+    slug: "how-to-choose-the-right-digital-lock",
+    categoryKey: "buying-guide",
+    author: "تیم محتوا",
+    tags: ["قفل دیجیتال", "راهنمای خرید"],
+    excerpt:
+      "قفل‌های دیجیتال روش‌های مختلفی برای باز شدن دارند؛ این راهنما به شما کمک می‌کند مدل مناسب را انتخاب کنید.",
+    paragraphs: [
+      "قفل‌های دیجیتال امروزی از روش‌های متنوعی مانند اثرانگشت، رمز عددی، کارت هوشمند و حتی اتصال Wi-Fi برای باز کردن درب استفاده می‌کنند.",
+      "برای خانه‌هایی که رفت‌وآمد خانواده در آن‌ها زیاد است، قفل‌های اثرانگشتی گزینه‌ی سریع‌تر و راحت‌تری هستند؛ در حالی‌که قفل‌های رمزی برای واحدهای اجاره‌ای که نیاز به تغییر دوره‌ای رمز دارند مناسب‌ترند.",
+      "پیش از خرید، به گارانتی، پشتیبانی برق اضطراری (باتری) و امکان اتصال به اپلیکیشن موبایل نیز توجه کنید تا در صورت قطعی برق دچار مشکل نشوید.",
+    ],
+    publishedAt: "2026-05-18T08:00:00.000Z",
+  },
+  {
+    title: "معرفی جدیدترین مدل قفل دیجیتال هوشمند وایفای",
+    slug: "introducing-the-new-smart-wifi-digital-lock",
+    categoryKey: "news",
+    author: "تیم محتوا",
+    tags: ["قفل دیجیتال", "محصول جدید"],
+    excerpt: "جدیدترین قفل دیجیتال هوشمند مجموعه با قابلیت اتصال Wi-Fi و کنترل از راه دور معرفی شد.",
+    paragraphs: [
+      "با افزوده شدن قفل دیجیتال هوشمند وایفای مدل D400 به مجموعه‌ی محصولات، حالا امکان کنترل و مانیتورینگ درب ورودی از طریق اپلیکیشن موبایل نیز فراهم شده است.",
+      "این مدل علاوه بر بازشدن با اثرانگشت، رمز و اپلیکیشن، گزارش ورود و خروج را نیز برای کاربر ثبت می‌کند و می‌تواند برای اعضای خانواده کد دسترسی جداگانه صادر کند.",
+    ],
+    publishedAt: "2026-06-02T08:00:00.000Z",
+    featured: true,
+  },
+  {
+    title: "همکاری جدید با برند هافله برای عرضه محصولات باکیفیت",
+    slug: "new-partnership-with-hafele-brand",
+    categoryKey: "news",
+    author: "تیم محتوا",
+    tags: ["برند", "اخبار"],
+    excerpt: "مجموعه‌ی ما همکاری رسمی خود را با برند هافله برای عرضه‌ی محصولات جدید آغاز کرد.",
+    paragraphs: [
+      "در ادامه‌ی روند گسترش تنوع محصولات، همکاری رسمی با برند هافله آغاز شده و مدل‌های جدیدی از دستگیره و قفل درب به‌زودی در دسترس مشتریان قرار می‌گیرد.",
+      "این محصولات با گارانتی اصالت کالا عرضه می‌شوند و مشتریان می‌توانند از طریق صفحه‌ی محصولات، مدل‌های موجود این برند را مشاهده کنند.",
+    ],
+    publishedAt: "2026-06-15T08:00:00.000Z",
+  },
+  {
+    title: "نکات نگهداری از قفل و دستگیره در فصل زمستان",
+    slug: "winter-maintenance-tips-for-locks-and-handles",
+    categoryKey: "maintenance-tips",
+    author: "تیم محتوا",
+    tags: ["نگهداری", "نکات فنی"],
+    excerpt: "رطوبت و سرمای زمستان می‌تواند روی عملکرد قفل و دستگیره اثر بگذارد؛ این نکات را رعایت کنید.",
+    paragraphs: [
+      "در فصل زمستان، رطوبت و نوسان دما می‌تواند باعث سفت شدن مکانیزم قفل یا زنگ‌زدگی تدریجی قطعات فلزی شود.",
+      "توصیه می‌شود هر چند ماه یک‌بار از روان‌کننده‌های مخصوص قفل (نه روغن معمولی) برای روان نگه‌داشتن سیلندر استفاده کنید و از تجمع رطوبت روی سطح دستگیره‌های فلزی جلوگیری کنید.",
+      "در صورت مشاهده‌ی سفتی غیرعادی در چرخش کلید، بهتر است پیش از آسیب دیدن سیلندر، برای بازدید فنی اقدام کنید.",
+    ],
+    publishedAt: "2026-06-25T08:00:00.000Z",
+  },
+  {
+    title: "روش صحیح نصب سیلندر قفل درب",
+    slug: "how-to-properly-install-a-lock-cylinder",
+    categoryKey: "maintenance-tips",
+    author: "تیم محتوا",
+    tags: ["سیلندر قفل", "نصب"],
+    excerpt: "نصب نادرست سیلندر قفل می‌تواند امنیت درب را کاهش دهد؛ مراحل صحیح نصب را بشناسید.",
+    paragraphs: [
+      "پیش از نصب سیلندر جدید، حتماً طول آن را با ضخامت درب و فاصله‌ی دستگیره تا لبه‌ی درب مطابقت دهید تا سیلندر نه بیش‌ازحد بیرون بزند و نه داخل قفل فرو رود.",
+      "پیچ ثابت‌کننده‌ی سیلندر باید به‌اندازه‌ی کافی سفت شود، اما سفت کردن بیش‌ازحد می‌تواند باعث گیر کردن چرخش کلید شود.",
+      "در صورت نداشتن تجربه‌ی قبلی، توصیه می‌شود نصب سیلندرهای ضدسرقت را به یک نصاب حرفه‌ای بسپارید.",
+    ],
+    publishedAt: "2026-07-05T08:00:00.000Z",
+  },
+];
+
 const buildShortDescription = (product: ProductSeed, category: CategorySeed): string =>
   `${product.title} از دسته ${category.title}، ساخته‌شده از ${product.materials.join(" و ")} با کیفیت بالا و طراحی متناسب با درهای مدرن.`;
 
@@ -362,6 +519,8 @@ async function clearCollections(payload: Payload) {
   await payload.delete({ collection: "products", where: { id: { exists: true } } });
   await payload.delete({ collection: "categories", where: { id: { exists: true } } });
   await payload.delete({ collection: "brands", where: { id: { exists: true } } });
+  await payload.delete({ collection: "articles", where: { id: { exists: true } } });
+  await payload.delete({ collection: "article-categories", where: { id: { exists: true } } });
   await payload.delete({ collection: "media", where: { id: { exists: true } } });
 }
 
@@ -396,6 +555,24 @@ async function seedMedia(payload: Payload): Promise<Record<string, number>> {
     },
   });
   mediaByKey.brandLogo = brandLogoDoc.id;
+
+  for (const articleCategory of articleCategorySeeds) {
+    const buffer = await createPlaceholderImage(
+      articleCategory.slug.toUpperCase(),
+      articleCategory.color,
+    );
+    const doc = await payload.create({
+      collection: "media",
+      data: { alt: `تصویر مقالات ${articleCategory.title}` },
+      file: {
+        data: buffer,
+        mimetype: "image/png",
+        name: `article-${articleCategory.slug}.png`,
+        size: buffer.length,
+      },
+    });
+    mediaByKey[`article-${articleCategory.key}`] = doc.id;
+  }
 
   return mediaByKey;
 }
@@ -487,6 +664,57 @@ async function seedProducts(
   }
 }
 
+async function seedArticleCategories(payload: Payload): Promise<Record<string, number>> {
+  payload.logger.info("Creating article categories...");
+  const articleCategoryIds: Record<string, number> = {};
+
+  for (const category of articleCategorySeeds) {
+    const doc = await payload.create({
+      collection: "article-categories",
+      data: {
+        title: category.title,
+        slug: category.slug,
+        description: category.description,
+        order: category.order,
+      },
+    });
+    articleCategoryIds[category.key] = doc.id;
+  }
+
+  return articleCategoryIds;
+}
+
+async function seedArticles(
+  payload: Payload,
+  articleCategoryIds: Record<string, number>,
+  mediaByKey: Record<string, number>,
+) {
+  payload.logger.info("Creating articles...");
+
+  for (const article of articleSeeds) {
+    const featuredImageId = mediaByKey[`article-${article.categoryKey}`];
+
+    await payload.create({
+      collection: "articles",
+      data: {
+        title: article.title,
+        slug: article.slug,
+        excerpt: article.excerpt,
+        content: toRichTextParagraphs(article.paragraphs),
+        category: articleCategoryIds[article.categoryKey],
+        featuredImage: featuredImageId,
+        author: article.author,
+        tags: article.tags,
+        publishedAt: article.publishedAt,
+        featured: article.featured ?? false,
+        published: true,
+        seoTitle: `${article.title} | قفل و دستگیره ایران`,
+        seoDescription: article.excerpt,
+      },
+    });
+  }
+}
+
 async function seedSiteSettings(payload: Payload, mediaByKey: Record<string, number>) {
   payload.logger.info("Updating site settings...");
   await payload.updateGlobal({
@@ -523,10 +751,12 @@ async function run() {
   const categoryIds = await seedCategories(payload, mediaByKey);
   const brandIds = await seedBrands(payload, mediaByKey);
   await seedProducts(payload, categoryIds, brandIds, mediaByKey);
+  const articleCategoryIds = await seedArticleCategories(payload);
+  await seedArticles(payload, articleCategoryIds, mediaByKey);
   await seedSiteSettings(payload, mediaByKey);
 
   payload.logger.info(
-    `Seed complete: ${categorySeeds.length} categories, ${brandSeeds.length} brands, ${productSeeds.length} products.`,
+    `Seed complete: ${categorySeeds.length} categories, ${brandSeeds.length} brands, ${productSeeds.length} products, ${articleCategorySeeds.length} article categories, ${articleSeeds.length} articles.`,
   );
 }
 

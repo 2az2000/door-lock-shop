@@ -36,17 +36,21 @@ export function WhyChooseUs() {
           align="center"
           className="mx-auto max-w-2xl"
         />
-        <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-10 grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-4">
           {REASONS.map((reason) => (
             <div
               key={reason.title}
-              className="rounded-2xl bg-card p-6 text-center shadow-sm ring-1 ring-foreground/10"
+              className="group rounded-2xl bg-card p-4 text-center shadow-sm ring-1 ring-foreground/10 transition-shadow hover:shadow-md sm:p-6"
             >
-              <reason.icon className="mx-auto size-8 text-primary" aria-hidden="true" />
-              <h3 className="mt-4 font-heading text-base font-semibold text-foreground">
+              <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-primary/10 transition-colors group-hover:bg-primary/15 sm:size-14">
+                <reason.icon className="size-6 text-primary sm:size-7" aria-hidden="true" />
+              </div>
+              <h3 className="mt-4 font-heading text-sm font-semibold text-foreground sm:text-base">
                 {reason.title}
               </h3>
-              <p className="mt-2 text-sm text-muted-foreground">{reason.description}</p>
+              <p className="mt-1.5 text-xs text-muted-foreground sm:mt-2 sm:text-sm">
+                {reason.description}
+              </p>
             </div>
           ))}
         </div>

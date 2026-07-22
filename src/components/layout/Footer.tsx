@@ -15,14 +15,14 @@ export async function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="mt-24 border-t border-border bg-muted/30">
-      <Container className="grid gap-10 py-12 sm:grid-cols-2 lg:grid-cols-4">
+    <footer className="mt-16 border-t border-border bg-muted/30 sm:mt-24">
+      <Container className="grid gap-8 py-10 sm:grid-cols-2 sm:gap-10 sm:py-12 lg:grid-cols-4">
         <div className="space-y-3">
           <h3 className="font-heading text-base font-semibold text-foreground">
             {siteSettings.companyName}
           </h3>
           {siteSettings.address ? (
-            <p className="text-sm text-muted-foreground">{siteSettings.address}</p>
+            <p className="text-sm wrap-break-word text-muted-foreground">{siteSettings.address}</p>
           ) : null}
         </div>
 
@@ -57,9 +57,12 @@ export async function Footer() {
               </li>
             ) : null}
             {siteSettings.email ? (
-              <li className="flex items-center gap-1.5">
-                <Mail className="size-3.5" aria-hidden="true" />
-                <a href={`mailto:${siteSettings.email}`} className="hover:text-foreground">
+              <li className="flex items-start gap-1.5">
+                <Mail className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
+                <a
+                  href={`mailto:${siteSettings.email}`}
+                  className="wrap-break-word hover:text-foreground"
+                >
                   {siteSettings.email}
                 </a>
               </li>

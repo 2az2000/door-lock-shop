@@ -5,6 +5,8 @@ import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import { buildConfig } from "payload";
 import sharp from "sharp";
 
+import { ArticleCategories } from "./payload/collections/ArticleCategories";
+import { Articles } from "./payload/collections/Articles";
 import { Brands } from "./payload/collections/Brands";
 import { Categories } from "./payload/collections/Categories";
 import { Media } from "./payload/collections/Media";
@@ -19,7 +21,7 @@ export default buildConfig({
   admin: {
     user: Users.slug,
   },
-  collections: [Users, Media, Categories, Brands, Products],
+  collections: [Users, Media, Categories, Brands, Products, ArticleCategories, Articles],
   globals: [SiteSettings],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",

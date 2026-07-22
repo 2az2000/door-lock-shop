@@ -18,7 +18,7 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
 
   return (
     <Container className="flex flex-col items-center gap-4 py-24 text-center">
-      <h1 className="font-heading text-2xl font-semibold text-foreground">مشکلی پیش آمد</h1>
+      <h1 className="font-heading text-xl font-semibold text-foreground sm:text-2xl">مشکلی پیش آمد</h1>
       <p className="max-w-md text-muted-foreground">
         متأسفانه در نمایش این صفحه خطایی رخ داد. لطفاً دوباره تلاش کنید.
       </p>
