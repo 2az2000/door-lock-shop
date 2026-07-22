@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 
 import { Breadcrumb } from "@/components/common/Breadcrumb";
@@ -64,14 +65,41 @@ export default async function CategoryDetailPage({ params }: CategoryDetailPageP
       <JsonLd data={breadcrumbJsonLd(breadcrumbItems)} />
       <Breadcrumb items={breadcrumbItems} />
 
-      <div className="mt-4 space-y-2">
-        <h1 className="font-heading text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
-          {category.title}
-        </h1>
-        {category.description ? (
-          <p className="max-w-2xl text-muted-foreground">{category.description}</p>
-        ) : null}
-      </div>
+      {category.image ? (
+        <div className="relative mt-4 aspect-2/1 overflow-hidden rounded-2xl shadow-sm ring-1 ring-foreground/10 sm:aspect-3/1">
+          <Image
+            src={category.image.url}
+            alt={category.image.alt}
+            fill
+            sizes="100vw"
+            className="object-cover"
+            priority
+          />
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent"
+          />
+          <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8">
+            <h1 className="font-heading text-2xl font-semibold text-white sm:text-3xl">
+              {category.title}
+            </h1>
+            {category.description ? (
+              <p className="mt-2 max-w-2xl text-sm text-white/85 sm:text-base">
+                {category.description}
+              </p>
+            ) : null}
+          </div>
+        </div>
+      ) : (
+        <div className="mt-4 space-y-2">
+          <h1 className="font-heading text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+            {category.title}
+          </h1>
+          {category.description ? (
+            <p className="max-w-2xl text-muted-foreground">{category.description}</p>
+          ) : null}
+        </div>
+      )}
 
       <ProductGrid
         products={products.docs}

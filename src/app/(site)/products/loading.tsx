@@ -11,7 +11,7 @@ export default function Loading() {
       </div>
 
       <div className="mt-8 flex flex-col gap-8 md:flex-row">
-        <div className="hidden w-64 shrink-0 md:block">
+        <div className="hidden w-72 shrink-0 md:block">
           <Skeleton className="h-96 w-full rounded-2xl" />
         </div>
 

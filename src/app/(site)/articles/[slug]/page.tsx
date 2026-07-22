@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Calendar, Tag, User } from "lucide-react";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
@@ -74,22 +75,33 @@ export default async function ArticleDetailPage({ params }: ArticleDetailPagePro
       <Breadcrumb items={breadcrumbItems} />
 
       <div className="mx-auto mt-6 max-w-3xl">
-        <div className="space-y-3">
+        <div className="space-y-4">
           {article.category ? (
-            <span className="text-sm font-medium text-primary">{article.category.title}</span>
+            <span className="inline-flex rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+              {article.category.title}
+            </span>
           ) : null}
           <h1 className="font-heading text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
             {article.title}
           </h1>
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            {article.author ? <span>{article.author}</span> : null}
-            {article.author && date ? <span aria-hidden="true">·</span> : null}
-            {date ? <span>{date}</span> : null}
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 border-b border-border pb-5 text-sm text-muted-foreground">
+            {article.author ? (
+              <span className="flex items-center gap-1.5">
+                <User className="size-3.5" aria-hidden="true" />
+                {article.author}
+              </span>
+            ) : null}
+            {date ? (
+              <span className="flex items-center gap-1.5">
+                <Calendar className="size-3.5" aria-hidden="true" />
+                {date}
+              </span>
+            ) : null}
           </div>
         </div>
 
         {article.featuredImage ? (
-          <div className="relative mt-6 aspect-video overflow-hidden rounded-2xl bg-muted">
+          <div className="relative mt-6 aspect-video overflow-hidden rounded-2xl bg-muted shadow-sm ring-1 ring-foreground/10">
             <Image
               src={article.featuredImage.url}
               alt={article.featuredImage.alt}
@@ -108,7 +120,8 @@ export default async function ArticleDetailPage({ params }: ArticleDetailPagePro
         ) : null}
 
         {article.tags.length > 0 ? (
-          <div className="mt-8 flex flex-wrap gap-2">
+          <div className="mt-8 flex flex-wrap items-center gap-2 border-t border-border pt-6">
+            <Tag className="size-4 text-muted-foreground" aria-hidden="true" />
             {article.tags.map((tag) => (
               <span
                 key={tag}

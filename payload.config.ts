@@ -17,6 +17,14 @@ import { SiteSettings } from "./payload/globals/SiteSettings";
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
+const payloadSecret = process.env.PAYLOAD_SECRET;
+
+if (!payloadSecret) {
+  throw new Error(
+    "PAYLOAD_SECRET environment variable is required. Set it in .env.local before starting the app — never fall back to an empty secret, as it would allow forging auth tokens.",
+  );
+}
+
 export default buildConfig({
   admin: {
     user: Users.slug,
@@ -24,7 +32,7 @@ export default buildConfig({
   collections: [Users, Media, Categories, Brands, Products, ArticleCategories, Articles],
   globals: [SiteSettings],
   editor: lexicalEditor(),
-  secret: process.env.PAYLOAD_SECRET || "",
+  secret: payloadSecret,
   typescript: {
     outputFile: path.resolve(dirname, "payload-types.ts"),
   },

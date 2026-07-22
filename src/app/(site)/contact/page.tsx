@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Mail, MapPin, Phone } from "lucide-react";
+import { Clock, Mail, MapPin, Phone, Send, type LucideIcon } from "lucide-react";
+import type { ReactNode } from "react";
 
 import { Breadcrumb } from "@/components/common/Breadcrumb";
 import { Container } from "@/components/layout/Container";
@@ -16,6 +17,28 @@ export const metadata: Metadata = {
   openGraph: { title: TITLE, description: DESCRIPTION, url: "/contact", type: "website" },
   twitter: { title: TITLE, description: DESCRIPTION },
 };
+
+function ContactInfoRow({
+  icon: Icon,
+  label,
+  children,
+}: {
+  icon: LucideIcon;
+  label: string;
+  children: ReactNode;
+}) {
+  return (
+    <div className="flex items-start gap-3">
+      <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary/10">
+        <Icon className="size-4 text-primary" aria-hidden="true" />
+      </div>
+      <div className="space-y-0.5 pt-1.5">
+        <p className="text-xs text-muted-foreground">{label}</p>
+        <div className="text-sm font-medium text-foreground">{children}</div>
+      </div>
+    </div>
+  );
+}
 
 export default async function ContactPage() {
   const siteSettings = await getSiteSettings();
@@ -35,52 +58,62 @@ export default async function ContactPage() {
       </div>
 
       <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-2">
-        <div className="rounded-2xl bg-card p-6 shadow-sm ring-1 ring-foreground/10">
+        <div className="rounded-2xl bg-card p-6 shadow-sm ring-1 ring-foreground/10 sm:p-8">
+          <div className="mb-6 flex items-center gap-2">
+            <Send className="size-4 text-primary" aria-hidden="true" />
+            <h2 className="font-heading text-base font-semibold text-foreground">
+              فرم ارسال پیام
+            </h2>
+          </div>
           <ContactForm />
         </div>
 
         <div className="space-y-6">
-          <div className="space-y-3 rounded-2xl bg-card p-6 shadow-sm ring-1 ring-foreground/10">
+          <div className="space-y-5 rounded-2xl bg-card p-6 shadow-sm ring-1 ring-foreground/10 sm:p-8">
             {siteSettings.phone ? (
-              <div className="flex items-center gap-3 text-sm text-foreground">
-                <Phone className="size-4 text-muted-foreground" aria-hidden="true" />
+              <ContactInfoRow icon={Phone} label="تلفن ثابت">
                 <a href={`tel:${siteSettings.phone}`} className="hover:text-primary">
                   {siteSettings.phone}
                 </a>
-              </div>
+              </ContactInfoRow>
             ) : null}
             {siteSettings.mobile ? (
-              <div className="flex items-center gap-3 text-sm text-foreground">
-                <Phone className="size-4 text-muted-foreground" aria-hidden="true" />
+              <ContactInfoRow icon={Phone} label="تلفن همراه">
                 <a href={`tel:${siteSettings.mobile}`} className="hover:text-primary">
                   {siteSettings.mobile}
                 </a>
-              </div>
+              </ContactInfoRow>
             ) : null}
             {siteSettings.email ? (
-              <div className="flex items-center gap-3 text-sm text-foreground">
-                <Mail className="size-4 text-muted-foreground" aria-hidden="true" />
-                <a href={`mailto:${siteSettings.email}`} className="hover:text-primary">
+              <ContactInfoRow icon={Mail} label="ایمیل">
+                <a href={`mailto:${siteSettings.email}`} className="wrap-break-word hover:text-primary">
                   {siteSettings.email}
                 </a>
-              </div>
+              </ContactInfoRow>
             ) : null}
             {siteSettings.address ? (
-              <div className="flex items-start gap-3 text-sm text-foreground">
-                <MapPin className="mt-0.5 size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
-                <span>{siteSettings.address}</span>
-              </div>
+              <ContactInfoRow icon={MapPin} label="آدرس">
+                <span className="wrap-break-word font-normal text-muted-foreground">
+                  {siteSettings.address}
+                </span>
+              </ContactInfoRow>
             ) : null}
           </div>
 
           {siteSettings.workingHours.length > 0 ? (
-            <div className="space-y-2 rounded-2xl bg-card p-6 shadow-sm ring-1 ring-foreground/10">
-              <h2 className="text-sm font-semibold text-foreground">ساعات کاری</h2>
-              <ul className="space-y-1 text-sm text-muted-foreground">
+            <div className="rounded-2xl bg-card p-6 shadow-sm ring-1 ring-foreground/10 sm:p-8">
+              <div className="mb-4 flex items-center gap-2">
+                <Clock className="size-4 text-primary" aria-hidden="true" />
+                <h2 className="text-sm font-semibold text-foreground">ساعات کاری</h2>
+              </div>
+              <ul className="space-y-2 text-sm text-muted-foreground">
                 {siteSettings.workingHours.map((entry) => (
-                  <li key={entry.day} className="flex items-center justify-between">
+                  <li
+                    key={entry.day}
+                    className="flex items-center justify-between border-b border-border pb-2 last:border-b-0 last:pb-0"
+                  >
                     <span>{entry.day}</span>
-                    <span>{entry.hours}</span>
+                    <span className="font-medium text-foreground">{entry.hours}</span>
                   </li>
                 ))}
               </ul>
@@ -89,7 +122,7 @@ export default async function ContactPage() {
 
           {siteSettings.googleMap ? (
             isEmbeddableMap ? (
-              <div className="overflow-hidden rounded-2xl ring-1 ring-foreground/10">
+              <div className="overflow-hidden rounded-2xl shadow-sm ring-1 ring-foreground/10">
                 <iframe
                   src={siteSettings.googleMap}
                   className="h-64 w-full border-0"

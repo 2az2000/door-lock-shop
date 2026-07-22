@@ -1,5 +1,6 @@
 "use client";
 
+import { SlidersHorizontal } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { ReactNode } from "react";
 import { useEffect, useState, useTransition } from "react";
@@ -7,6 +8,7 @@ import { useEffect, useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
 import type { Brand } from "@/types/brand";
 import type { CategorySummary } from "@/types/category";
 
@@ -15,6 +17,7 @@ interface ProductFiltersSidebarProps {
   brands: Brand[];
   materials: string[];
   idPrefix?: string;
+  variant?: "card" | "plain";
 }
 
 function parseList(value: string | null): string[] {
@@ -42,9 +45,9 @@ function CheckboxRow({
   onCheckedChange: (checked: boolean) => void;
 }) {
   return (
-    <div className="flex items-center gap-2">
+    <div className="-mx-1.5 flex items-center gap-2 rounded-lg px-1.5 py-1 transition-colors hover:bg-muted/60">
       <Checkbox id={id} checked={checked} onCheckedChange={onCheckedChange} />
-      <Label htmlFor={id} className="cursor-pointer text-sm font-normal text-muted-foreground">
+      <Label htmlFor={id} className="w-full cursor-pointer text-sm font-normal text-muted-foreground">
         {label}
       </Label>
     </div>
@@ -56,7 +59,9 @@ export function ProductFiltersSidebar({
   brands,
   materials,
   idPrefix = "",
+  variant = "card",
 }: ProductFiltersSidebarProps) {
+  const isCard = variant === "card";
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -125,15 +130,31 @@ export function ProductFiltersSidebar({
   };
 
   return (
-    <div className="flex flex-col gap-5">
-      <div className="flex items-center justify-between">
-        <h2 className="font-heading text-base font-semibold text-foreground">فیلترها</h2>
-        {hasActiveFilters ? (
+    <div
+      className={cn(
+        "flex flex-col gap-5",
+        isCard && "rounded-2xl border border-border bg-card p-5",
+      )}
+    >
+      {isCard ? (
+        <div className="flex items-center justify-between">
+          <h2 className="flex items-center gap-2 font-heading text-base font-semibold text-foreground">
+            <SlidersHorizontal className="size-4 text-primary" aria-hidden="true" />
+            فیلترها
+          </h2>
+          {hasActiveFilters ? (
+            <Button variant="ghost" size="sm" onClick={clearAll}>
+              پاک کردن
+            </Button>
+          ) : null}
+        </div>
+      ) : hasActiveFilters ? (
+        <div className="flex justify-end">
           <Button variant="ghost" size="sm" onClick={clearAll}>
             پاک کردن
           </Button>
-        ) : null}
-      </div>
+        </div>
+      ) : null}
 
       <FilterGroup title="محدوده قیمت (تومان)">
         <div className="flex min-w-0 items-center gap-2">

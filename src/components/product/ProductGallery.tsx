@@ -45,7 +45,7 @@ export function ProductGallery({ images, title }: ProductGalleryProps) {
         <CarouselContent>
           {images.map((image, index) => (
             <CarouselItem key={index}>
-              <div className="relative aspect-square overflow-hidden rounded-2xl bg-muted">
+              <div className="relative aspect-square overflow-hidden rounded-2xl bg-muted shadow-sm ring-1 ring-foreground/10">
                 <Image
                   src={image.url}
                   alt={image.alt || title}
@@ -76,8 +76,10 @@ export function ProductGallery({ images, title }: ProductGalleryProps) {
               aria-label={`نمایش تصویر ${index + 1} از ${images.length}`}
               aria-current={selected === index}
               className={cn(
-                "relative size-16 shrink-0 overflow-hidden rounded-lg ring-2 transition-colors",
-                selected === index ? "ring-primary" : "ring-transparent",
+                "relative size-16 shrink-0 overflow-hidden rounded-lg ring-2 transition-all",
+                selected === index
+                  ? "ring-primary"
+                  : "opacity-70 ring-transparent hover:opacity-100",
               )}
             >
               <Image src={image.url} alt="" fill sizes="64px" className="object-cover" />

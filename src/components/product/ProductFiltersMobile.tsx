@@ -31,6 +31,7 @@ export function ProductFiltersMobile({ categories, brands, materials }: ProductF
             brands={brands}
             materials={materials}
             idPrefix="mobile-"
+            variant="plain"
           />
         </div>
       </SheetContent>

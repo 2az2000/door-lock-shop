@@ -94,7 +94,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
       />
 
       <div className="mt-8 flex flex-col gap-8 md:flex-row">
-        <aside className="hidden md:block md:w-64 md:shrink-0">
+        <aside className="hidden md:block md:w-72 md:shrink-0">
           <div className="sticky top-24">
             <ProductFiltersSidebar categories={categories} brands={brands} materials={materialOptions} />
           </div>
