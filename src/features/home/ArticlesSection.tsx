@@ -8,6 +8,8 @@ import { Container } from "@/components/layout/Container";
 import { Button } from "@/components/ui/button";
 import type { ArticleSummary } from "@/types/article";
 
+const SLIDER_SIZES = "(min-width: 1024px) 19vw, (min-width: 768px) 24vw, (min-width: 640px) 32vw, 80vw";
+
 interface ArticlesSectionProps {
   articles: ArticleSummary[];
 }
@@ -31,7 +33,7 @@ export function ArticlesSection({ articles }: ArticlesSectionProps) {
         </div>
         <Slider className="mt-8">
           {articles.map((article) => (
-            <ArticleCard key={article.id} article={article} />
+            <ArticleCard key={article.id} article={article} sizes={SLIDER_SIZES} />
           ))}
         </Slider>
       </Container>

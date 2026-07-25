@@ -8,6 +8,8 @@ import { Container } from "@/components/layout/Container";
 import { Button } from "@/components/ui/button";
 import type { CategorySummary } from "@/types/category";
 
+const SLIDER_SIZES = "(min-width: 1024px) 19vw, (min-width: 768px) 24vw, (min-width: 640px) 32vw, 80vw";
+
 interface CategoriesSectionProps {
   categories: CategorySummary[];
 }
@@ -31,7 +33,7 @@ export function CategoriesSection({ categories }: CategoriesSectionProps) {
         </div>
         <Slider className="mt-8">
           {categories.map((category) => (
-            <CategoryCard key={category.id} category={category} />
+            <CategoryCard key={category.id} category={category} sizes={SLIDER_SIZES} />
           ))}
         </Slider>
       </Container>

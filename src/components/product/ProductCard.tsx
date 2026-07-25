@@ -7,11 +7,14 @@ import { motion } from "framer-motion";
 import type { ProductSummary } from "@/types/product";
 import { formatPrice } from "@/utils/format-price";
 
+const GRID_SIZES = "(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 45vw, 50vw";
+
 interface ProductCardProps {
   product: ProductSummary;
+  sizes?: string;
 }
 
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({ product, sizes = GRID_SIZES }: ProductCardProps) {
   return (
     <motion.div whileHover={{ y: -4 }} transition={{ duration: 0.2, ease: "easeOut" }}>
       <Link
@@ -24,7 +27,7 @@ export function ProductCard({ product }: ProductCardProps) {
               src={product.featuredImage.url}
               alt={product.featuredImage.alt}
               fill
-              sizes="(min-width: 1024px) 19vw, (min-width: 768px) 24vw, (min-width: 640px) 32vw, 45vw"
+              sizes={sizes}
               className="object-cover transition-transform duration-300 group-hover:scale-105"
             />
           ) : null}

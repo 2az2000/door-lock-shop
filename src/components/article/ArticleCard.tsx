@@ -7,11 +7,14 @@ import { motion } from "framer-motion";
 import type { ArticleSummary } from "@/types/article";
 import { formatDate } from "@/utils/format-date";
 
+const GRID_SIZES = "(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 45vw, 50vw";
+
 interface ArticleCardProps {
   article: ArticleSummary;
+  sizes?: string;
 }
 
-export function ArticleCard({ article }: ArticleCardProps) {
+export function ArticleCard({ article, sizes = GRID_SIZES }: ArticleCardProps) {
   const date = formatDate(article.publishedAt);
 
   return (
@@ -26,7 +29,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
               src={article.featuredImage.url}
               alt={article.featuredImage.alt}
               fill
-              sizes="(min-width: 1024px) 19vw, (min-width: 768px) 24vw, (min-width: 640px) 32vw, 45vw"
+              sizes={sizes}
               className="object-cover transition-transform duration-300 group-hover:scale-105"
             />
           ) : null}

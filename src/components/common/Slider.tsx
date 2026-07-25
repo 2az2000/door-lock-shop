@@ -23,21 +23,23 @@ export function Slider({ children, itemClassName, className }: SliderProps) {
   };
 
   return (
-    <div className={className}>
+    <div className={cn("-mx-4 sm:mx-0", className)}>
       <div
         ref={scrollRef}
         className="scrollbar-none flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth pb-2 sm:gap-4"
       >
+        <div aria-hidden="true" className="w-0.5 shrink-0 snap-start sm:hidden" />
         {Children.map(children, (child) => (
           <div
             className={cn(
-              "shrink-0 snap-start basis-[45%] sm:basis-[32%] md:basis-[24%] lg:basis-[19%]",
+              "shrink-0 snap-start basis-[80%] sm:basis-[32%] md:basis-[24%] lg:basis-[19%]",
               itemClassName,
             )}
           >
             {child}
           </div>
         ))}
+        <div aria-hidden="true" className="w-1 shrink-0 snap-start sm:hidden" />
       </div>
 
       <div className="mt-4 hidden justify-end gap-2 sm:flex">
