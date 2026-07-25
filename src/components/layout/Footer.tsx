@@ -16,8 +16,8 @@ export async function Footer() {
 
   return (
     <footer className="mt-16 border-t border-border bg-muted/30 sm:mt-24">
-      <Container className="grid gap-8 py-10 sm:grid-cols-2 sm:gap-10 sm:py-12 lg:grid-cols-4">
-        <div className="space-y-3">
+      <Container className="grid divide-y divide-border py-8 text-center sm:grid-cols-2 sm:gap-10 sm:py-12 sm:text-start sm:divide-y-0 lg:grid-cols-4">
+        <div className="space-y-3 pb-4 sm:pb-0">
           <h3 className="font-heading text-base font-semibold text-foreground">
             {siteSettings.companyName}
           </h3>
@@ -26,7 +26,7 @@ export async function Footer() {
           ) : null}
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-3 py-4 sm:py-0">
           <h4 className="text-sm font-semibold text-foreground">دسترسی سریع</h4>
           <ul className="space-y-2 text-sm text-muted-foreground">
             {MAIN_NAV_LINKS.map((link) => (
@@ -39,7 +39,7 @@ export async function Footer() {
           </ul>
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-3 py-4 sm:py-0">
           <h4 className="text-sm font-semibold text-foreground">اطلاعات تماس</h4>
           <ul className="space-y-2 text-sm text-muted-foreground">
             {siteSettings.phone ? (
@@ -57,7 +57,7 @@ export async function Footer() {
               </li>
             ) : null}
             {siteSettings.email ? (
-              <li className="flex items-start gap-1.5">
+              <li className="flex items-start justify-center gap-1.5 sm:justify-start">
                 <Mail className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
                 <a
                   href={`mailto:${siteSettings.email}`}
@@ -70,9 +70,9 @@ export async function Footer() {
           </ul>
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-3 pt-4 sm:pt-0">
           <h4 className="text-sm font-semibold text-foreground">شبکه‌های اجتماعی</h4>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-center gap-2 sm:justify-start">
             {siteSettings.instagram ? (
               <a
                 href={siteSettings.instagram}
