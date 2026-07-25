@@ -7,17 +7,18 @@ import { MAIN_NAV_LINKS } from "@/constants/navigation";
 import { getSiteSettings } from "@/services/site-settings.service";
 
 import { Container } from "./Container";
+import { HeaderScrollShell } from "./HeaderScrollShell";
 import { MobileNav } from "./MobileNav";
 
 export async function Header() {
   const siteSettings = await getSiteSettings();
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-sm">
-      <Container className="flex h-16 items-center justify-between gap-2 sm:gap-4">
+    <HeaderScrollShell>
+      <Container className="flex h-16 items-center justify-between gap-2 transition-[height] duration-300 ease-out group-data-[scrolled=true]:h-14 sm:gap-4">
         <Link
           href="/"
-          className="flex items-center gap-2 font-heading text-base font-semibold text-foreground sm:text-lg"
+          className="flex items-center gap-2 font-heading text-base font-semibold text-foreground transition-transform duration-200 hover:scale-[1.03] sm:text-lg"
         >
           {siteSettings.logo ? (
             <Image
@@ -25,7 +26,7 @@ export async function Header() {
               alt={siteSettings.logo.alt}
               width={36}
               height={36}
-              className="size-9 rounded-lg object-contain"
+              className="size-9 rounded-lg object-contain transition-all duration-300 group-data-[scrolled=true]:size-8"
             />
           ) : null}
           <span className="max-w-35 truncate sm:max-w-none">{siteSettings.companyName}</span>
@@ -36,7 +37,7 @@ export async function Header() {
             <Link
               key={link.href}
               href={link.href}
-              className="rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              className="relative rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors duration-200 hover:bg-muted hover:text-foreground"
             >
               {link.label}
             </Link>
@@ -59,6 +60,6 @@ export async function Header() {
           <MobileNav siteSettings={siteSettings} />
         </div>
       </Container>
-    </header>
+    </HeaderScrollShell>
   );
 }
