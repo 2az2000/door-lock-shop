@@ -1,7 +1,14 @@
-import { Layers, Palette, Ruler, Tag, Weight, type LucideIcon } from "lucide-react";
+"use client";
 
+import { AnimatePresence, motion } from "framer-motion";
+import { FileText, Layers, ListChecks, Palette, Ruler, Tag, Weight, type LucideIcon } from "lucide-react";
+import { useState } from "react";
+
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { ProductDetail } from "@/types/product";
 import { resolveSwatchColor } from "@/utils/color-swatch";
+
+type SpecsTabValue = "description" | "specs";
 
 interface ProductSpecsProps {
   product: ProductDetail;
@@ -52,47 +59,95 @@ function ColorSwatchRow({ colors }: { colors: string[] }) {
 }
 
 export function ProductSpecs({ product }: ProductSpecsProps) {
+  const [activeTab, setActiveTab] = useState<SpecsTabValue>("description");
   const hasSpecs = product.specifications.length > 0;
   const hasColors = product.colors.length > 0;
   const hasMaterials = product.materials.length > 0;
   const hasDimensions = Boolean(product.dimensions);
   const hasWeight = Boolean(product.weight);
   const hasSpecTable = hasSpecs || hasColors || hasMaterials || hasDimensions || hasWeight;
+  const hasDescription = Boolean(product.fullDescriptionHtml);
 
-  if (!product.fullDescriptionHtml && !hasSpecTable) return null;
+  if (!hasDescription && !hasSpecTable) return null;
+
+  const descriptionContent = (
+    <div
+      id={`product-description-content-${product.slug}`}
+      className="space-y-3 text-sm leading-7 text-muted-foreground [&_strong]:font-semibold [&_strong]:text-foreground"
+      dangerouslySetInnerHTML={{ __html: product.fullDescriptionHtml as string }}
+    />
+  );
+
+  const specsContent = (
+    <dl
+      id={`product-specs-content-${product.slug}`}
+      className="divide-y divide-border overflow-hidden rounded-2xl border border-border"
+    >
+      {product.specifications.map((spec) => (
+        <SpecRow key={spec.label} label={spec.label} value={spec.value} />
+      ))}
+      {hasMaterials ? <SpecRow label="جنس" value={product.materials.join("، ")} icon={Layers} /> : null}
+      {hasColors ? <ColorSwatchRow colors={product.colors} /> : null}
+      {hasDimensions ? (
+        <SpecRow label="ابعاد" value={product.dimensions as string} icon={Ruler} />
+      ) : null}
+      {hasWeight ? <SpecRow label="وزن" value={product.weight as string} icon={Weight} /> : null}
+    </dl>
+  );
+
+  if (hasDescription && hasSpecTable) {
+    return (
+      <div id={`product-specs-tabs-${product.slug}`}>
+        <Tabs
+          value={activeTab}
+          onValueChange={(value) => setActiveTab(value as SpecsTabValue)}
+        >
+          <TabsList
+            variant="line"
+            className="w-full justify-start gap-6 border-b border-border pb-0"
+          >
+            <TabsTrigger
+              id={`product-tab-description-${product.slug}`}
+              value="description"
+              className="h-11 gap-2 px-1 text-base font-semibold data-active:text-primary after:bg-primary after:h-0.5"
+            >
+              <FileText className="size-4" aria-hidden="true" />
+              توضیحات
+            </TabsTrigger>
+            <TabsTrigger
+              id={`product-tab-specs-${product.slug}`}
+              value="specs"
+              className="h-11 gap-2 px-1 text-base font-semibold data-active:text-primary after:bg-primary after:h-0.5"
+            >
+              <ListChecks className="size-4" aria-hidden="true" />
+              مشخصات فنی
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={activeTab}
+            id={`product-specs-panel-${activeTab}-${product.slug}`}
+            role="tabpanel"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className="pt-6"
+          >
+            {activeTab === "description" ? descriptionContent : specsContent}
+          </motion.div>
+        </AnimatePresence>
+      </div>
+    );
+  }
 
   return (
-    <div className="flex flex-col gap-8">
-      {product.fullDescriptionHtml ? (
-        <div>
-          <h2 className="mb-3 font-heading text-lg font-semibold text-foreground">توضیحات</h2>
-          <div
-            className="space-y-3 text-sm leading-7 text-muted-foreground [&_strong]:font-semibold [&_strong]:text-foreground"
-            dangerouslySetInnerHTML={{ __html: product.fullDescriptionHtml }}
-          />
-        </div>
-      ) : null}
-
-      {hasSpecTable ? (
-        <div>
-          <h2 className="mb-3 font-heading text-lg font-semibold text-foreground">مشخصات فنی</h2>
-          <dl className="divide-y divide-border overflow-hidden rounded-2xl border border-border">
-            {product.specifications.map((spec) => (
-              <SpecRow key={spec.label} label={spec.label} value={spec.value} />
-            ))}
-            {hasMaterials ? (
-              <SpecRow label="جنس" value={product.materials.join("، ")} icon={Layers} />
-            ) : null}
-            {hasColors ? <ColorSwatchRow colors={product.colors} /> : null}
-            {hasDimensions ? (
-              <SpecRow label="ابعاد" value={product.dimensions as string} icon={Ruler} />
-            ) : null}
-            {hasWeight ? (
-              <SpecRow label="وزن" value={product.weight as string} icon={Weight} />
-            ) : null}
-          </dl>
-        </div>
-      ) : null}
+    <div id={`product-specs-single-${product.slug}`}>
+      <h2 className="mb-3 font-heading text-lg font-semibold text-foreground">
+        {hasDescription ? "توضیحات" : "مشخصات فنی"}
+      </h2>
+      {hasDescription ? descriptionContent : specsContent}
     </div>
   );
 }

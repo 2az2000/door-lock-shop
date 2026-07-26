@@ -81,11 +81,10 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
 
       <div className="mt-6 grid grid-cols-1 gap-10 lg:grid-cols-2">
         <ProductGallery images={galleryImages} title={product.title} />
-        <ProductInfo product={product} siteSettings={siteSettings} />
-      </div>
-
-      <div className="mt-16">
-        <ProductSpecs product={product} />
+        <div className="flex flex-col gap-10">
+          <ProductInfo product={product} siteSettings={siteSettings} />
+          <ProductSpecs product={product} />
+        </div>
       </div>
 
       <div className="mt-16">
