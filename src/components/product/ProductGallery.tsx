@@ -60,8 +60,8 @@ export function ProductGallery({ images, title }: ProductGalleryProps) {
         </CarouselContent>
         {images.length > 1 ? (
           <>
-            <CarouselPrevious />
-            <CarouselNext />
+            <CarouselPrevious className="left-4 bg-background/90 shadow-sm backdrop-blur-sm" />
+            <CarouselNext className="right-4 bg-background/90 shadow-sm backdrop-blur-sm" />
           </>
         ) : null}
       </Carousel>
