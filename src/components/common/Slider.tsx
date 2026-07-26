@@ -26,7 +26,7 @@ export function Slider({ children, itemClassName, className }: SliderProps) {
     <div className={cn("-mx-4 sm:mx-0", className)}>
       <div
         ref={scrollRef}
-        className="scrollbar-none flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth pb-2 sm:gap-4"
+        className="scrollbar-none flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth py-2 sm:gap-4"
       >
         <div aria-hidden="true" className="w-0.5 shrink-0 snap-start sm:hidden" />
         {Children.map(children, (child) => (
