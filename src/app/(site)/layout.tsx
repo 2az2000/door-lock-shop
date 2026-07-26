@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Vazirmatn } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
 import { JsonLd } from "@/components/common/JsonLd";
@@ -10,9 +10,19 @@ import { ThemeProvider } from "@/providers/theme-provider";
 import { getSiteSettings } from "@/services/site-settings.service";
 import { organizationJsonLd } from "@/utils/structured-data";
 
-const vazirmatn = Vazirmatn({
+const peyda = localFont({
+  src: [
+    { path: "../../../public/font/Peyda Pro/Peyda-Thin.ttf", weight: "100", style: "normal" },
+    { path: "../../../public/font/Peyda Pro/peyda-extralight.ttf", weight: "200", style: "normal" },
+    { path: "../../../public/font/Peyda Pro/peyda-light.ttf", weight: "300", style: "normal" },
+    { path: "../../../public/font/Peyda Pro/Peyda-Regular.ttf", weight: "400", style: "normal" },
+    { path: "../../../public/font/Peyda Pro/Peyda-Medium.ttf", weight: "500", style: "normal" },
+    { path: "../../../public/font/Peyda Pro/Peyda-SemiBold.ttf", weight: "600", style: "normal" },
+    { path: "../../../public/font/Peyda Pro/Peyda-Bold.ttf", weight: "700", style: "normal" },
+    { path: "../../../public/font/Peyda Pro/Peyda-ExtraBold.ttf", weight: "800", style: "normal" },
+    { path: "../../../public/font/Peyda Pro/Peyda-Black.ttf", weight: "900", style: "normal" },
+  ],
   variable: "--font-sans",
-  subsets: ["arabic"],
 });
 
 const DEFAULT_TITLE = "قفل و دستگیره در";
@@ -60,7 +70,7 @@ export default async function RootLayout({
     <html
       lang="fa"
       dir="rtl"
-      className={`${vazirmatn.variable} h-full antialiased`}
+      className={`${peyda.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">
