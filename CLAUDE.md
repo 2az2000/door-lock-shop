@@ -132,3 +132,7 @@ Alt-text/focus/contrast audit; `"use client"` boundary audit; `loading.tsx`/`err
 - **تأیید:** `payload generate:types`، `npm run seed`، `tsc`، `lint`، `build` همگی تمیز (۴۰ صفحه در build، شامل ۶ صفحه‌ی مقاله‌ی SSG)؛ ۱۷ چک زنده روی سرور (فهرست، جزئیات، فیلتر دسته‌بندی، بخش خانه، JSON-LD، sitemap) همگی PASS.
 
 ---
+
+# قوانین توسعه (به‌درخواست کاربر)
+
+- **از این به بعد، هر تگ/المان JSX که ساخته می‌شود باید یک `id` مخصوص و معنادار داشته باشد** (مثلاً `id="product-card-price"` نه `id="div1"`)، تا در درخواست‌های بعدی بتوان دقیقاً مشخص کرد منظور کدام المان است.

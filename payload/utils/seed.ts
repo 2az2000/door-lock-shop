@@ -48,12 +48,61 @@ function toRichTextParagraphs(paragraphs: string[]) {
   };
 }
 
-const createPlaceholderImage = async (label: string, color: string): Promise<Buffer> => {
+type IconKey = "handle" | "lock" | "cylinder" | "hinge" | "keypad" | "shield" | "document";
+
+// Simple flat vector illustrations (no external assets/APIs) so seeded media
+// actually looks like door hardware instead of a plain color box with text.
+const ICON_MARKUP: Record<IconKey, (color: string) => string> = {
+  handle: () => `
+    <rect x="520" y="330" width="100" height="240" rx="50" fill="#ffffff"/>
+    <path d="M 610 360 h 220" stroke="#ffffff" stroke-width="56" stroke-linecap="round"/>
+    <path d="M 830 360 v 90" stroke="#ffffff" stroke-width="56" stroke-linecap="round"/>
+  `,
+  lock: (color) => `
+    <path d="M 480 420 v -60 a 120 120 0 0 1 240 0 v 60" fill="none" stroke="#ffffff" stroke-width="36" stroke-linecap="round"/>
+    <rect x="420" y="420" width="360" height="260" rx="36" fill="#ffffff"/>
+    <circle cx="600" cy="510" r="34" fill="${color}"/>
+    <rect x="582" y="510" width="36" height="80" rx="10" fill="${color}"/>
+  `,
+  cylinder: (color) => `
+    <circle cx="460" cy="450" r="150" fill="#ffffff"/>
+    <rect x="426" y="410" width="68" height="80" rx="14" fill="${color}"/>
+    <rect x="620" y="420" width="260" height="50" rx="25" fill="#ffffff"/>
+    <rect x="790" y="470" width="26" height="55" fill="#ffffff"/>
+    <rect x="750" y="470" width="26" height="65" fill="#ffffff"/>
+  `,
+  hinge: (color) => `
+    <rect x="410" y="370" width="150" height="300" rx="18" fill="#ffffff"/>
+    <rect x="640" y="370" width="150" height="300" rx="18" fill="#ffffff"/>
+    <circle cx="600" cy="430" r="20" fill="${color}"/>
+    <circle cx="600" cy="520" r="20" fill="${color}"/>
+    <circle cx="600" cy="610" r="20" fill="${color}"/>
+  `,
+  keypad: (color) => `
+    <rect x="430" y="320" width="340" height="440" rx="36" fill="#ffffff"/>
+    <rect x="466" y="360" width="268" height="80" rx="14" fill="${color}"/>
+    ${[490, 560, 630]
+      .map((y) => [500, 600, 700].map((x) => `<circle cx="${x}" cy="${y}" r="16" fill="${color}"/>`).join(""))
+      .join("")}
+  `,
+  shield: (color) => `
+    <path d="M600 320 L760 380 V520 C760 620 690 690 600 720 C510 690 440 620 440 520 V380 Z" fill="#ffffff"/>
+    <circle cx="600" cy="500" r="26" fill="${color}"/>
+    <rect x="586" y="500" width="28" height="60" rx="8" fill="${color}"/>
+  `,
+  document: (color) => `
+    <rect x="460" y="320" width="280" height="360" rx="24" fill="#ffffff"/>
+    <rect x="500" y="380" width="200" height="24" rx="12" fill="${color}"/>
+    <rect x="500" y="440" width="200" height="24" rx="12" fill="${color}"/>
+    <rect x="500" y="500" width="140" height="24" rx="12" fill="${color}"/>
+  `,
+};
+
+const createPlaceholderImage = async (icon: IconKey, color: string): Promise<Buffer> => {
   const svg = `
     <svg width="1200" height="900" xmlns="http://www.w3.org/2000/svg">
       <rect width="1200" height="900" fill="${color}"/>
-      <text x="600" y="450" font-size="64" fill="#ffffff" text-anchor="middle"
-        dominant-baseline="middle" font-family="Arial, sans-serif">${label}</text>
+      ${ICON_MARKUP[icon](color)}
     </svg>
   `;
   return sharp(Buffer.from(svg)).png().toBuffer();
@@ -65,6 +114,7 @@ interface CategorySeed {
   slug: string;
   description: string;
   color: string;
+  icon: IconKey;
   order: number;
 }
 
@@ -75,6 +125,7 @@ const categorySeeds: CategorySeed[] = [
     slug: "door-handles",
     description: "دستگیره‌های در داخلی و خارجی با طراحی متنوع و جنس‌های باکیفیت",
     color: "#8a7458",
+    icon: "handle",
     order: 1,
   },
   {
@@ -83,6 +134,7 @@ const categorySeeds: CategorySeed[] = [
     slug: "door-locks",
     description: "انواع قفل مکانیکی و ضدسرقت برای درهای چوبی و فلزی",
     color: "#4a5a6a",
+    icon: "lock",
     order: 2,
   },
   {
@@ -91,6 +143,7 @@ const categorySeeds: CategorySeed[] = [
     slug: "lock-cylinders",
     description: "سیلندرهای استاندارد و ضدسرقت سازگار با انواع قفل",
     color: "#6a6a6a",
+    icon: "cylinder",
     order: 3,
   },
   {
@@ -99,6 +152,7 @@ const categorySeeds: CategorySeed[] = [
     slug: "door-accessories",
     description: "زبانه، کفی، بازویی و سایر ملزومات نصب درب",
     color: "#7a6a8a",
+    icon: "hinge",
     order: 4,
   },
   {
@@ -107,6 +161,7 @@ const categorySeeds: CategorySeed[] = [
     slug: "digital-locks",
     description: "قفل‌های هوشمند اثرانگشتی، کارتی و رمزی برای درهای مدرن",
     color: "#2f3e46",
+    icon: "keypad",
     order: 5,
   },
 ];
@@ -529,7 +584,7 @@ async function seedMedia(payload: Payload): Promise<Record<string, number>> {
   const mediaByKey: Record<string, number> = {};
 
   for (const category of categorySeeds) {
-    const buffer = await createPlaceholderImage(category.slug.toUpperCase(), category.color);
+    const buffer = await createPlaceholderImage(category.icon, category.color);
     const doc = await payload.create({
       collection: "media",
       data: { alt: `تصویر ${category.title}` },
@@ -543,7 +598,7 @@ async function seedMedia(payload: Payload): Promise<Record<string, number>> {
     mediaByKey[category.key] = doc.id;
   }
 
-  const brandLogoBuffer = await createPlaceholderImage("BRAND", "#9a9a9a");
+  const brandLogoBuffer = await createPlaceholderImage("shield", "#9a9a9a");
   const brandLogoDoc = await payload.create({
     collection: "media",
     data: { alt: "لوگوی برند" },
@@ -557,10 +612,7 @@ async function seedMedia(payload: Payload): Promise<Record<string, number>> {
   mediaByKey.brandLogo = brandLogoDoc.id;
 
   for (const articleCategory of articleCategorySeeds) {
-    const buffer = await createPlaceholderImage(
-      articleCategory.slug.toUpperCase(),
-      articleCategory.color,
-    );
+    const buffer = await createPlaceholderImage("document", articleCategory.color);
     const doc = await payload.create({
       collection: "media",
       data: { alt: `تصویر مقالات ${articleCategory.title}` },
