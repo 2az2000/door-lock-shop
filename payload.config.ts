@@ -2,6 +2,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { postgresAdapter } from "@payloadcms/db-postgres";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
+import { vercelBlobStorage } from "@payloadcms/storage-vercel-blob";
 import { buildConfig } from "payload";
 import sharp from "sharp";
 
@@ -18,6 +19,21 @@ const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
 const payloadSecret = process.env.PAYLOAD_SECRET;
+
+// Media is stored on Vercel Blob in production and on the local `staticDir`
+// during development. Presence of the token is what switches modes, so a local
+// checkout without the token keeps working exactly as before.
+const blobToken = process.env.BLOB_READ_WRITE_TOKEN;
+
+// `DATABASE_URI` is what local setups use. Vercel's Neon/Postgres marketplace
+// integration injects its own names instead, so accept those too rather than
+// making the operator duplicate the connection string by hand (which drifts
+// the moment the database password is rotated). Pooled URLs come first.
+const databaseUri =
+  process.env.DATABASE_URI ||
+  process.env.DATABASE_URL ||
+  process.env.POSTGRES_URL ||
+  "";
 
 if (!payloadSecret) {
   throw new Error(
@@ -38,8 +54,16 @@ export default buildConfig({
   },
   db: postgresAdapter({
     pool: {
-      connectionString: process.env.DATABASE_URI || "",
+      connectionString: databaseUri,
     },
+    migrationDir: path.resolve(dirname, "payload/migrations"),
   }),
+  plugins: [
+    vercelBlobStorage({
+      enabled: Boolean(blobToken),
+      collections: { media: true },
+      token: blobToken,
+    }),
+  ],
   sharp,
 });
