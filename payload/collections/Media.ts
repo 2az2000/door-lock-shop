@@ -2,11 +2,15 @@ import type { CollectionConfig } from "payload";
 
 import { adminOnly } from "../access/adminOnly";
 import { publicRead } from "../access/publicRead";
+import { normalizeUploadBuffers } from "../hooks/normalizeUploadBuffers";
 
 export const Media: CollectionConfig = {
   slug: "media",
   admin: {
     useAsTitle: "alt",
+  },
+  hooks: {
+    beforeChange: [normalizeUploadBuffers],
   },
   access: {
     read: publicRead,
