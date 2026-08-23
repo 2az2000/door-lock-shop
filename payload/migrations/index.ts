@@ -1,6 +1,7 @@
 import * as migration_20260809_101527_initial from './20260809_101527_initial';
 import * as migration_20260818_065406_add_media_blur_data_url from './20260818_065406_add_media_blur_data_url';
 import * as migration_20260823_105500_backfill_media_blur from './20260823_105500_backfill_media_blur';
+import * as migration_20260823_113500_backfill_media_blur_from_blob from './20260823_113500_backfill_media_blur_from_blob';
 
 export const migrations = [
   {
@@ -17,5 +18,10 @@ export const migrations = [
     up: migration_20260823_105500_backfill_media_blur.up,
     down: migration_20260823_105500_backfill_media_blur.down,
     name: '20260823_105500_backfill_media_blur'
+  },
+  {
+    up: migration_20260823_113500_backfill_media_blur_from_blob.up,
+    down: migration_20260823_113500_backfill_media_blur_from_blob.down,
+    name: '20260823_113500_backfill_media_blur_from_blob'
   },
 ];
