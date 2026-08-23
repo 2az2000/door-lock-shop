@@ -13,6 +13,14 @@ const nextConfig: NextConfig = {
     // month instead of re-encoding on every cache miss.
     minimumCacheTTL: 2678400,
   },
+  // sharp's native binding loads `libvips-cpp.so` through dlopen, which static
+  // file tracing cannot see, so the shared library can be left out of the
+  // serverless bundle even though the binding itself is included. Shipping the
+  // whole `@img` tree keeps the two together. Only the platform's own binaries
+  // exist in any given install, so this costs nothing on other platforms.
+  outputFileTracingIncludes: {
+    "/**": ["./node_modules/@img/**"],
+  },
   async headers() {
     return [
       {
