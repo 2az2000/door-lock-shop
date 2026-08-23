@@ -795,6 +795,9 @@ async function seedSiteSettings(payload: Payload, mediaByKey: Record<string, num
           mediaByKey["digital-locks"],
         ],
         aboutImage: mediaByKey["door-accessories"],
+        aboutTitle: "درباره قفل و دستگیره ایران",
+        aboutText:
+          "قفل و دستگیره ایران با سال‌ها تجربه در زمینه‌ی تأمین قفل، دستگیره و یراق‌آلات درب، محصولاتی باکیفیت و متنوع را برای پروژه‌های مسکونی، تجاری و اداری گردآوری کرده است.\n\nتیم ما در تمام مراحل انتخاب محصول در کنار شماست و پشتیبانی پس از فروش را جدی می‌گیرد.",
       },
       seoDefaults: {
         seoTitle: "قفل و دستگیره ایران | فروش انواع قفل، دستگیره و یراق‌آلات درب",

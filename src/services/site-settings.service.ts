@@ -27,6 +27,8 @@ const toSiteSettings = (settings: SiteSetting): SiteSettings => ({
       .map(toMediaAsset)
       .filter((asset): asset is MediaAsset => asset !== null),
     aboutImage: toMediaAsset(settings.homepage?.aboutImage),
+    aboutTitle: settings.homepage?.aboutTitle ?? null,
+    aboutText: settings.homepage?.aboutText ?? null,
   },
   seoDefaults: {
     seoTitle: settings.seoDefaults?.seoTitle ?? null,

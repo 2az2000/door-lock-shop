@@ -22,6 +22,9 @@ export interface SiteSettings {
     /** Drives the hero rotation; empty when the admin has not chosen any. */
     heroImages: MediaAsset[];
     aboutImage: MediaAsset | null;
+    aboutTitle: string | null;
+    /** Free text; blank lines separate paragraphs. */
+    aboutText: string | null;
   };
   seoDefaults: {
     seoTitle: string | null;

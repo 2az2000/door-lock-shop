@@ -711,6 +711,14 @@ export interface SiteSetting {
      * تصویر بخش «درباره ...» که زیر محصولات ویژه نمایش داده می‌شود. اگر خالی بماند، از تصویر اولین دسته‌بندی استفاده می‌شود.
      */
     aboutImage?: (number | null) | Media;
+    /**
+     * عنوان بخش درباره. اگر خالی بماند، «درباره [نام شرکت]» نمایش داده می‌شود.
+     */
+    aboutTitle?: string | null;
+    /**
+     * متن بخش درباره. هر خط خالی یک پاراگراف جدید می‌سازد. اگر خالی بماند، متن پیش‌فرض نمایش داده می‌شود.
+     */
+    aboutText?: string | null;
   };
   seoDefaults?: {
     seoTitle?: string | null;
@@ -747,6 +755,8 @@ export interface SiteSettingsSelect<T extends boolean = true> {
     | {
         heroImages?: T;
         aboutImage?: T;
+        aboutTitle?: T;
+        aboutText?: T;
       };
   seoDefaults?:
     | T

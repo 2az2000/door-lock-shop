@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "ci": "node payload/utils/baseline-migrations.mjs && payload migrate --force-accept-warning && next build",
+    "ci": "node payload/utils/baseline-migrations.mjs && payload migrate && next build",
     "start": "next start",
     "lint": "eslint",
     "payload": "payload",

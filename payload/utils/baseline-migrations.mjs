@@ -86,6 +86,18 @@ try {
   await client.query(`delete from payload_migrations where name = 'dev'`);
   await client.query("commit");
 
+  // `payload migrate` answers its own dev-mode prompt with "no" when the marker
+  // survives — and with --force-accept-warning it exits 0 having applied
+  // nothing at all. Either way the build would carry on against a stale schema,
+  // so treat a surviving marker as fatal rather than let that happen silently.
+  const { rows: leftover } = await client.query(
+    `select 1 from payload_migrations where name = 'dev'`,
+  );
+
+  if (leftover.length > 0) {
+    throw new Error("the dev marker survived the repair; refusing to migrate against it");
+  }
+
   console.log(
     `baseline-migrations: replaced the dev marker with ${alreadyApplied.length} recorded migration(s)` +
       (alreadyApplied.length ? `: ${alreadyApplied.join(", ")}` : ""),

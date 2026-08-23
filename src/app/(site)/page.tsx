@@ -66,6 +66,8 @@ export default async function HomePage() {
           companyName={siteSettings.companyName}
           categories={categories}
           image={siteSettings.homepage.aboutImage}
+          title={siteSettings.homepage.aboutTitle}
+          text={siteSettings.homepage.aboutText}
         />
       </FadeIn>
       <FadeIn>

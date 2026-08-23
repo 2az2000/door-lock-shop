@@ -167,9 +167,14 @@ export function Hero({ companyName, categories, brandsCount, images }: HeroProps
         </div>
 
         {visualImages.length > 0 ? (
-          <div className="relative hidden lg:block">
-            <div className="relative mx-auto aspect-square max-w-md">
-              <div className="absolute inset-6 rounded-[2.5rem] bg-primary/10" aria-hidden="true" />
+          <div id="hero-visual" className="relative mb-10 block sm:mb-12 lg:mb-0">
+            {/* Wide on small screens where a square would push the fold too far
+                down; square from `lg`, where it sits beside the copy. */}
+            <div className="relative mx-auto aspect-3/2 w-full max-w-md sm:aspect-16/10 lg:aspect-square">
+              <div
+                className="absolute inset-4 rounded-[2rem] bg-primary/10 lg:inset-6 lg:rounded-[2.5rem]"
+                aria-hidden="true"
+              />
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div
                   key={imagePairIndex}
@@ -179,24 +184,30 @@ export function Hero({ companyName, categories, brandsCount, images }: HeroProps
                   exit={{ opacity: 0, scale: 0.96 }}
                   transition={{ duration: 0.5, ease: "easeInOut" }}
                 >
-                  <div className="absolute inset-0 overflow-hidden rounded-[2rem] shadow-lg ring-1 ring-foreground/10">
+                  <div
+                    id="hero-primary-frame"
+                    className="absolute inset-0 overflow-hidden rounded-[1.5rem] shadow-lg ring-1 ring-foreground/10 lg:rounded-[2rem]"
+                  >
                     <MediaImage
                       id={`hero-primary-media-${imagePairIndex}`}
                       asset={visualImages[0]}
                       fill
-                      sizes="420px"
+                      sizes="(min-width: 1024px) 420px, (min-width: 640px) 448px, 100vw"
                       className="object-cover"
                       priority={slideIndex === 0}
                     />
                   </div>
                   {visualImages[1] ? (
-                    <div className="absolute -bottom-8 -inset-s-8 w-40 overflow-hidden rounded-2xl shadow-xl ring-4 ring-background sm:w-48">
+                    <div
+                      id="hero-secondary-frame"
+                      className="absolute -bottom-6 -inset-s-3 w-24 overflow-hidden rounded-xl shadow-xl ring-4 ring-background sm:-bottom-8 sm:-inset-s-6 sm:w-36 sm:rounded-2xl lg:-inset-s-8 lg:w-48"
+                    >
                       <div className="relative aspect-square">
                         <MediaImage
                           id={`hero-secondary-media-${imagePairIndex}`}
                           asset={visualImages[1]}
                           fill
-                          sizes="192px"
+                          sizes="(min-width: 1024px) 192px, (min-width: 640px) 144px, 96px"
                           className="object-cover"
                         />
                       </div>
