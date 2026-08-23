@@ -1,11 +1,11 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, LayoutGrid, ShieldCheck, Sparkles } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
+import { MediaImage } from "@/components/common/MediaImage";
 import { Container } from "@/components/layout/Container";
 import { Button } from "@/components/ui/button";
 import type { CategorySummary } from "@/types/category";
@@ -173,9 +173,9 @@ export function Hero({ companyName, categories, brandsCount }: HeroProps) {
                   transition={{ duration: 0.5, ease: "easeInOut" }}
                 >
                   <div className="absolute inset-0 overflow-hidden rounded-[2rem] shadow-lg ring-1 ring-foreground/10">
-                    <Image
-                      src={visualCategories[0].image!.url}
-                      alt={visualCategories[0].image!.alt}
+                    <MediaImage
+                      id={`hero-primary-media-${imagePairIndex}`}
+                      asset={visualCategories[0].image}
                       fill
                       sizes="420px"
                       className="object-cover"
@@ -185,9 +185,9 @@ export function Hero({ companyName, categories, brandsCount }: HeroProps) {
                   {visualCategories[1] ? (
                     <div className="absolute -bottom-8 -inset-s-8 w-40 overflow-hidden rounded-2xl shadow-xl ring-4 ring-background sm:w-48">
                       <div className="relative aspect-square">
-                        <Image
-                          src={visualCategories[1].image!.url}
-                          alt={visualCategories[1].image!.alt}
+                        <MediaImage
+                          id={`hero-secondary-media-${imagePairIndex}`}
+                          asset={visualCategories[1].image}
                           fill
                           sizes="192px"
                           className="object-cover"

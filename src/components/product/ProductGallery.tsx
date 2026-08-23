@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useState } from "react";
 
+import { MediaImage, MediaPlaceholder } from "@/components/common/MediaImage";
 import {
   Carousel,
   CarouselContent,
@@ -11,6 +11,7 @@ import {
   CarouselPrevious,
   type CarouselApi,
 } from "@/components/ui/carousel";
+import { IMAGE_SIZES } from "@/constants/media";
 import { cn } from "@/lib/utils";
 import type { MediaAsset } from "@/types/media";
 
@@ -36,7 +37,13 @@ export function ProductGallery({ images, title }: ProductGalleryProps) {
   }, [api]);
 
   if (images.length === 0) {
-    return <div className="aspect-square rounded-2xl bg-muted" aria-hidden="true" />;
+    return (
+      <MediaPlaceholder
+        id="product-gallery-empty"
+        label={`تصویری برای ${title} ثبت نشده است`}
+        className="aspect-square rounded-2xl"
+      />
+    );
   }
 
   return (
@@ -46,11 +53,12 @@ export function ProductGallery({ images, title }: ProductGalleryProps) {
           {images.map((image, index) => (
             <CarouselItem key={index}>
               <div className="relative aspect-square overflow-hidden rounded-2xl bg-muted shadow-sm ring-1 ring-foreground/10">
-                <Image
-                  src={image.url}
+                <MediaImage
+                  id={`product-gallery-slide-${index}`}
+                  asset={image}
                   alt={image.alt || title}
                   fill
-                  sizes="(min-width: 1024px) 50vw, 100vw"
+                  sizes={IMAGE_SIZES.HALF}
                   className="object-cover"
                   priority={index === 0}
                 />
@@ -82,7 +90,14 @@ export function ProductGallery({ images, title }: ProductGalleryProps) {
                   : "opacity-70 ring-transparent hover:opacity-100",
               )}
             >
-              <Image src={image.url} alt="" fill sizes="64px" className="object-cover" />
+              <MediaImage
+                id={`product-gallery-thumb-${index}`}
+                asset={image}
+                alt=""
+                fill
+                sizes="64px"
+                className="object-cover"
+              />
             </button>
           ))}
         </div>

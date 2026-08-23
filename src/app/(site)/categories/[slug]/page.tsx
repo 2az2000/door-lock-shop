@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 
 import { Breadcrumb } from "@/components/common/Breadcrumb";
 import { JsonLd } from "@/components/common/JsonLd";
+import { MediaImage } from "@/components/common/MediaImage";
 import { Container } from "@/components/layout/Container";
 import { ProductGrid } from "@/components/product/ProductGrid";
+import { IMAGE_SIZES } from "@/constants/media";
 import { getCategories, getCategoryBySlug } from "@/services/categories.service";
 import { getProducts } from "@/services/products.service";
 import { breadcrumbJsonLd } from "@/utils/structured-data";
@@ -67,11 +68,11 @@ export default async function CategoryDetailPage({ params }: CategoryDetailPageP
 
       {category.image ? (
         <div className="relative mt-4 aspect-2/1 overflow-hidden rounded-2xl shadow-sm ring-1 ring-foreground/10 sm:aspect-3/1">
-          <Image
-            src={category.image.url}
-            alt={category.image.alt}
+          <MediaImage
+            id="category-hero-media"
+            asset={category.image}
             fill
-            sizes="100vw"
+            sizes={IMAGE_SIZES.FULL}
             className="object-cover"
             priority
           />

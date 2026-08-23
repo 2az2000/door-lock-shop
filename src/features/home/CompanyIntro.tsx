@@ -1,5 +1,4 @@
-import Image from "next/image";
-
+import { MediaImage } from "@/components/common/MediaImage";
 import { Container } from "@/components/layout/Container";
 import type { CategorySummary } from "@/types/category";
 
@@ -16,9 +15,9 @@ export function CompanyIntro({ companyName, categories }: CompanyIntroProps) {
       <Container className="grid items-center gap-10 lg:grid-cols-2">
         {visual?.image ? (
           <div className="relative aspect-4/3 overflow-hidden rounded-2xl shadow-sm ring-1 ring-foreground/10">
-            <Image
-              src={visual.image.url}
-              alt={visual.image.alt}
+            <MediaImage
+              id="company-intro-media"
+              asset={visual.image}
               fill
               sizes="(min-width: 1024px) 40vw, 100vw"
               className="object-cover"

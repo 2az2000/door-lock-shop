@@ -2,6 +2,7 @@ import type { CollectionConfig } from "payload";
 
 import { adminOnly } from "../access/adminOnly";
 import { publicRead } from "../access/publicRead";
+import { generateBlurDataURL } from "../hooks/generateBlurDataURL";
 import { normalizeUploadBuffers } from "../hooks/normalizeUploadBuffers";
 
 export const Media: CollectionConfig = {
@@ -10,7 +11,9 @@ export const Media: CollectionConfig = {
     useAsTitle: "alt",
   },
   hooks: {
-    beforeChange: [normalizeUploadBuffers],
+    // Buffers are normalized first so the preview is generated from the same
+    // owned bytes the storage plugin ends up uploading.
+    beforeChange: [normalizeUploadBuffers, generateBlurDataURL],
   },
   access: {
     read: publicRead,
@@ -36,6 +39,20 @@ export const Media: CollectionConfig = {
       name: "alt",
       type: "text",
       required: true,
+      admin: {
+        description: "متن جایگزین تصویر — برای دسترس‌پذیری و سئو الزامی است.",
+      },
+    },
+    {
+      name: "blurDataURL",
+      type: "text",
+      // Written by the `generateBlurDataURL` beforeChange hook from the
+      // uploaded binary; no field-level access rule here, since a `create:
+      // false` rule would strip the value the hook just set.
+      admin: {
+        hidden: true,
+        readOnly: true,
+      },
     },
   ],
 };

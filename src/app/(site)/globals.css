@@ -49,6 +49,11 @@
 }
 
 :root {
+  /* `only light` opts the default theme out of browser auto-dark (Chrome
+     Android auto dark theme, Samsung Internet dark mode), which was rendering
+     the site inverted on devices whose OS is in dark mode. The site's own dark
+     theme is the `.dark` block below, driven by the header toggle. */
+  color-scheme: only light;
   --background: oklch(0.995 0.002 60);
   --foreground: oklch(0.17 0.012 55);
   --card: oklch(1 0 0);
@@ -84,6 +89,7 @@
 }
 
 .dark {
+  color-scheme: only dark;
   --background: oklch(0.17 0.012 55);
   --foreground: oklch(0.97 0.004 55);
   --card: oklch(0.22 0.014 55);

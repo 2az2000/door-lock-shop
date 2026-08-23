@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -17,6 +16,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
+import { MediaImage } from "@/components/common/MediaImage";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -60,9 +60,9 @@ export function MobileNav({ siteSettings }: MobileNavProps) {
       <SheetContent side="right" className="w-3/4 sm:max-w-xs">
         <SheetHeader className="flex-row items-center gap-2.5 border-b border-border pb-4">
           {siteSettings.logo ? (
-            <Image
-              src={siteSettings.logo.url}
-              alt={siteSettings.logo.alt}
+            <MediaImage
+              id="mobile-nav-logo"
+              asset={siteSettings.logo}
               width={32}
               height={32}
               className="size-8 shrink-0 rounded-lg object-contain"

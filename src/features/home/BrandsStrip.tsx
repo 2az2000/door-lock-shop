@@ -1,5 +1,4 @@
-import Image from "next/image";
-
+import { MediaImage } from "@/components/common/MediaImage";
 import { Container } from "@/components/layout/Container";
 import type { Brand } from "@/types/brand";
 
@@ -18,9 +17,9 @@ export function BrandsStrip({ brands }: BrandsStripProps) {
           {brands.map((brand) => (
             <div key={brand.id} className="flex items-center gap-2 text-muted-foreground">
               {brand.logo ? (
-                <Image
-                  src={brand.logo.url}
-                  alt={brand.logo.alt}
+                <MediaImage
+                  id={`brands-strip-logo-${brand.id}`}
+                  asset={brand.logo}
                   width={40}
                   height={40}
                   className="size-10 rounded-lg object-contain grayscale transition-all hover:grayscale-0"

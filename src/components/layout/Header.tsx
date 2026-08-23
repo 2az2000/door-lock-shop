@@ -1,8 +1,9 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Phone } from "lucide-react";
 
+import { MediaImage } from "@/components/common/MediaImage";
 import { Pulse } from "@/components/common/Pulse";
+import { ThemeToggle } from "@/components/common/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { MAIN_NAV_LINKS } from "@/constants/navigation";
 import { getSiteSettings } from "@/services/site-settings.service";
@@ -22,11 +23,12 @@ export async function Header() {
           className="order-2 flex items-center gap-2 font-heading text-base font-semibold text-foreground transition-transform duration-200 hover:scale-[1.03] sm:text-lg md:order-1"
         >
           {siteSettings.logo ? (
-            <Image
-              src={siteSettings.logo.url}
-              alt={siteSettings.logo.alt}
+            <MediaImage
+              id="header-logo"
+              asset={siteSettings.logo}
               width={36}
               height={36}
+              priority
               className="size-9 rounded-lg object-contain transition-all duration-300 group-data-[scrolled=true]:size-8"
             />
           ) : null}
@@ -60,6 +62,7 @@ export async function Header() {
               <span className="self-center font-semibold">{siteSettings.phone}</span>
             </Button>
           ) : null}
+          <ThemeToggle />
           <MobileNav siteSettings={siteSettings} />
         </div>
       </Container>

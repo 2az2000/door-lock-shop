@@ -167,7 +167,11 @@ npm run ci                 # اجرای migrationها + build — دستور bui
 npm run generate:types     # ساخت دوباره‌ی payload-types.ts بعد از تغییر کالکشن‌ها/گلوبال‌ها
 npm run generate:importmap # ساخت دوباره‌ی import map پنل ادمین بعد از افزودن کامپوننت سفارشی
 npm run payload -- migrate:create <name>  # ساخت migration جدید بعد از تغییر اسکیمای کالکشن‌ها
+npm run backfill:blur      # ساخت پیش‌نمایش بلور برای تصاویری که قبل از افزوده‌شدن این قابلیت آپلود شده‌اند
 ```
+
+> پیش‌نمایش بلور (`blurDataURL`) هنگام آپلود به‌صورت خودکار ساخته می‌شود؛ `backfill:blur` فقط یک‌بار برای
+> تصاویر قدیمی لازم است و اجرای دوباره‌اش بی‌خطر است (تصاویری که پیش‌نمایش دارند رد می‌شوند).
 
 ---
 

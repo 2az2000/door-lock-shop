@@ -163,7 +163,11 @@ export interface User {
  */
 export interface Media {
   id: number;
+  /**
+   * متن جایگزین تصویر — برای دسترس‌پذیری و سئو الزامی است.
+   */
   alt: string;
+  blurDataURL?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -489,6 +493,7 @@ export interface UsersSelect<T extends boolean = true> {
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
+  blurDataURL?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;

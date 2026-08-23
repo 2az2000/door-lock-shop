@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import { Calendar, Tag, User } from "lucide-react";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 
 import { ArticleContent } from "@/components/article/ArticleContent";
 import { RelatedArticles } from "@/components/article/RelatedArticles";
 import { Breadcrumb } from "@/components/common/Breadcrumb";
 import { JsonLd } from "@/components/common/JsonLd";
+import { MediaImage } from "@/components/common/MediaImage";
 import { Container } from "@/components/layout/Container";
 import { getArticleBySlug, getArticles, getRelatedArticles } from "@/services/articles.service";
 import { formatDate } from "@/utils/format-date";
@@ -102,9 +102,9 @@ export default async function ArticleDetailPage({ params }: ArticleDetailPagePro
 
         {article.featuredImage ? (
           <div className="relative mt-6 aspect-video overflow-hidden rounded-2xl bg-muted shadow-sm ring-1 ring-foreground/10">
-            <Image
-              src={article.featuredImage.url}
-              alt={article.featuredImage.alt}
+            <MediaImage
+              id="article-featured-media"
+              asset={article.featuredImage}
               fill
               sizes="(min-width: 1024px) 768px, 100vw"
               className="object-cover"

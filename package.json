@@ -12,7 +12,8 @@
     "payload": "payload",
     "generate:types": "payload generate:types",
     "generate:importmap": "payload generate:importmap",
-    "seed": "payload run payload/utils/seed.ts"
+    "seed": "payload run payload/utils/seed.ts",
+    "backfill:blur": "payload run payload/utils/backfill-blur.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",
