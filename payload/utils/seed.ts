@@ -787,6 +787,15 @@ async function seedSiteSettings(payload: Payload, mediaByKey: Record<string, num
         { day: "پنجشنبه", hours: "9:00 - 13:00" },
       ],
       footerText: "کلیه حقوق این وب‌سایت متعلق به فروشگاه قفل و دستگیره ایران است.",
+      homepage: {
+        heroImages: [
+          mediaByKey["door-handles"],
+          mediaByKey["door-locks"],
+          mediaByKey["lock-cylinders"],
+          mediaByKey["digital-locks"],
+        ],
+        aboutImage: mediaByKey["door-accessories"],
+      },
       seoDefaults: {
         seoTitle: "قفل و دستگیره ایران | فروش انواع قفل، دستگیره و یراق‌آلات درب",
         seoDescription: "کاتالوگ آنلاین محصولات قفل، دستگیره، سیلندر و لوازم جانبی درب با کیفیت بالا.",

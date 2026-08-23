@@ -68,6 +68,33 @@ export const SiteSettings: GlobalConfig = {
       type: "textarea",
     },
     {
+      name: "homepage",
+      type: "group",
+      label: "صفحه‌ی اصلی",
+      fields: [
+        {
+          name: "heroImages",
+          type: "upload",
+          relationTo: "media",
+          hasMany: true,
+          maxRows: 8,
+          admin: {
+            description:
+              "تصاویر بخش ابتدایی صفحه‌ی اصلی. هر اسلاید دو تصویر پشت سر هم نمایش می‌دهد. اگر خالی بماند، از تصاویر دسته‌بندی‌ها استفاده می‌شود.",
+          },
+        },
+        {
+          name: "aboutImage",
+          type: "upload",
+          relationTo: "media",
+          admin: {
+            description:
+              "تصویر بخش «درباره ...» که زیر محصولات ویژه نمایش داده می‌شود. اگر خالی بماند، از تصویر اولین دسته‌بندی استفاده می‌شود.",
+          },
+        },
+      ],
+    },
+    {
       name: "seoDefaults",
       type: "group",
       fields: [

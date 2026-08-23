@@ -506,6 +506,10 @@ Working Hours
 
 Footer Text
 
+Homepage Hero Images
+
+Homepage About Image
+
 SEO Defaults
 
 ---

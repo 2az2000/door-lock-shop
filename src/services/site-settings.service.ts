@@ -2,6 +2,7 @@ import { unstable_cache } from "next/cache";
 
 import { toMediaAsset } from "@/lib/media";
 import { getPayloadClient } from "@/lib/payload-client";
+import type { MediaAsset } from "@/types/media";
 import type { SiteSettings } from "@/types/site-settings";
 import type { SiteSetting } from "@payload-types";
 
@@ -21,6 +22,12 @@ const toSiteSettings = (settings: SiteSetting): SiteSettings => ({
     hours: entry.hours,
   })),
   footerText: settings.footerText ?? null,
+  homepage: {
+    heroImages: (settings.homepage?.heroImages ?? [])
+      .map(toMediaAsset)
+      .filter((asset): asset is MediaAsset => asset !== null),
+    aboutImage: toMediaAsset(settings.homepage?.aboutImage),
+  },
   seoDefaults: {
     seoTitle: settings.seoDefaults?.seoTitle ?? null,
     seoDescription: settings.seoDefaults?.seoDescription ?? null,

@@ -46,6 +46,7 @@ export default async function HomePage() {
           companyName={siteSettings.companyName}
           categories={categories}
           brandsCount={brands.length}
+          images={siteSettings.homepage.heroImages}
         />
       </FadeIn>
       <FadeIn>
@@ -61,7 +62,11 @@ export default async function HomePage() {
         />
       </FadeIn>
       <FadeIn>
-        <CompanyIntro companyName={siteSettings.companyName} categories={categories} />
+        <CompanyIntro
+          companyName={siteSettings.companyName}
+          categories={categories}
+          image={siteSettings.homepage.aboutImage}
+        />
       </FadeIn>
       <FadeIn>
         <WhyChooseUs />

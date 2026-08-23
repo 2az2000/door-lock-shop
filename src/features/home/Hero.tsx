@@ -9,11 +9,14 @@ import { MediaImage } from "@/components/common/MediaImage";
 import { Container } from "@/components/layout/Container";
 import { Button } from "@/components/ui/button";
 import type { CategorySummary } from "@/types/category";
+import type { MediaAsset } from "@/types/media";
 
 interface HeroProps {
   companyName: string;
   categories: CategorySummary[];
   brandsCount: number;
+  /** Chosen in Site Settings; falls back to category imagery when empty. */
+  images: MediaAsset[];
 }
 
 const HERO_SLIDES = [
@@ -36,15 +39,19 @@ const HERO_SLIDES = [
 
 const SLIDE_INTERVAL_MS = 5000;
 
-export function Hero({ companyName, categories, brandsCount }: HeroProps) {
+export function Hero({ companyName, categories, brandsCount, images }: HeroProps) {
   const imagePairs = useMemo(() => {
-    const withImages = categories.filter((category) => category.image);
-    const pairs: CategorySummary[][] = [];
-    for (let i = 0; i < withImages.length; i += 2) {
-      pairs.push(withImages.slice(i, i + 2));
+    const source =
+      images.length > 0
+        ? images
+        : categories.flatMap((category) => (category.image ? [category.image] : []));
+
+    const pairs: MediaAsset[][] = [];
+    for (let i = 0; i < source.length; i += 2) {
+      pairs.push(source.slice(i, i + 2));
     }
     return pairs;
-  }, [categories]);
+  }, [images, categories]);
 
   const [slideIndex, setSlideIndex] = useState(0);
 
@@ -57,7 +64,7 @@ export function Hero({ companyName, categories, brandsCount }: HeroProps) {
 
   const slide = HERO_SLIDES[slideIndex];
   const imagePairIndex = imagePairs.length > 0 ? slideIndex % imagePairs.length : -1;
-  const visualCategories = imagePairIndex >= 0 ? imagePairs[imagePairIndex] : [];
+  const visualImages = imagePairIndex >= 0 ? imagePairs[imagePairIndex] : [];
 
   return (
     <section className="relative overflow-hidden border-b border-border bg-muted/30">
@@ -159,7 +166,7 @@ export function Hero({ companyName, categories, brandsCount }: HeroProps) {
           </div>
         </div>
 
-        {visualCategories.length > 0 ? (
+        {visualImages.length > 0 ? (
           <div className="relative hidden lg:block">
             <div className="relative mx-auto aspect-square max-w-md">
               <div className="absolute inset-6 rounded-[2.5rem] bg-primary/10" aria-hidden="true" />
@@ -175,19 +182,19 @@ export function Hero({ companyName, categories, brandsCount }: HeroProps) {
                   <div className="absolute inset-0 overflow-hidden rounded-[2rem] shadow-lg ring-1 ring-foreground/10">
                     <MediaImage
                       id={`hero-primary-media-${imagePairIndex}`}
-                      asset={visualCategories[0].image}
+                      asset={visualImages[0]}
                       fill
                       sizes="420px"
                       className="object-cover"
                       priority={slideIndex === 0}
                     />
                   </div>
-                  {visualCategories[1] ? (
+                  {visualImages[1] ? (
                     <div className="absolute -bottom-8 -inset-s-8 w-40 overflow-hidden rounded-2xl shadow-xl ring-4 ring-background sm:w-48">
                       <div className="relative aspect-square">
                         <MediaImage
                           id={`hero-secondary-media-${imagePairIndex}`}
-                          asset={visualCategories[1].image}
+                          asset={visualImages[1]}
                           fill
                           sizes="192px"
                           className="object-cover"

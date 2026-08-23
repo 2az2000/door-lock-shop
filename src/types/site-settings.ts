@@ -18,6 +18,11 @@ export interface SiteSettings {
   telegram: string | null;
   workingHours: WorkingHoursEntry[];
   footerText: string | null;
+  homepage: {
+    /** Drives the hero rotation; empty when the admin has not chosen any. */
+    heroImages: MediaAsset[];
+    aboutImage: MediaAsset | null;
+  };
   seoDefaults: {
     seoTitle: string | null;
     seoDescription: string | null;

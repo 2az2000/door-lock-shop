@@ -702,6 +702,16 @@ export interface SiteSetting {
       }[]
     | null;
   footerText?: string | null;
+  homepage?: {
+    /**
+     * تصاویر بخش ابتدایی صفحه‌ی اصلی. هر اسلاید دو تصویر پشت سر هم نمایش می‌دهد. اگر خالی بماند، از تصاویر دسته‌بندی‌ها استفاده می‌شود.
+     */
+    heroImages?: (number | Media)[] | null;
+    /**
+     * تصویر بخش «درباره ...» که زیر محصولات ویژه نمایش داده می‌شود. اگر خالی بماند، از تصویر اولین دسته‌بندی استفاده می‌شود.
+     */
+    aboutImage?: (number | null) | Media;
+  };
   seoDefaults?: {
     seoTitle?: string | null;
     seoDescription?: string | null;
@@ -732,6 +742,12 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         id?: T;
       };
   footerText?: T;
+  homepage?:
+    | T
+    | {
+        heroImages?: T;
+        aboutImage?: T;
+      };
   seoDefaults?:
     | T
     | {
