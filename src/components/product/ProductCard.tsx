@@ -41,7 +41,7 @@ export function ProductCard({ product, sizes = IMAGE_SIZES.CARD }: ProductCardPr
           {product.category ? (
             <span
               id={`product-card-category-${product.slug}`}
-              className="absolute text-white bg-['#00000069'] top-4 right-4 z-10 rounded-full px-2.5 py-1 text-xs font-medium shadow-sm backdrop-blur-sm"
+              className="absolute text-black bg-['#00000069'] top-4 right-4 z-10 rounded-full px-2.5 py-1 text-xs font-bold shadow-sm backdrop-blur-sm"
             >
               {product.category.title}
             </span>
